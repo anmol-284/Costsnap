@@ -1,0 +1,8 @@
+CostSnap.io
+
+icons - lucide
+
+
+API for stocks, exchange rates, cryptocurrencies = twelve data api (on rapid api), finnhub.io
+For visualising data = anychart (js lib)
+
