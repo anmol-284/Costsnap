@@ -1,14 +1,17 @@
 const express = require('express');
 const app = express();
 
+// it is used to import data from .env file
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 // to parse the data
 app.use(express.json());
 
+// importing routes
 const route = require('./routes/userroute');
 
+// mounting routes with different versions
 app.use("/api/v1", route);
 
 // start server on Port
