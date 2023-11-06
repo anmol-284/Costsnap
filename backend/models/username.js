@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
             required: true,
             maxLenth: 50,
         },
-        username:{
+        username: {
             type: String,
             required: true,
             maxLenth: 50,
@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema(
             required: true,
             default: Date.now(),
         },
+        transactions:[
+            {
+                type: mongoose.Types.ObjectId,
+                required: true,
+                ref: 'transaction',
+            }
+        ]
     }
 )
 

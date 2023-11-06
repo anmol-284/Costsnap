@@ -3,12 +3,11 @@ const username = require('./username');
 
 const transactionSchema = new mongoose.Schema(
     {
-        user_id:{
-            type: mongoose.Types.ObjectId,
-            required: true,
-            ref:'username',
-        },
         name:{
+            type:String,
+            required: true,
+        },
+        myname: {
             type:String,
             required: true,
         },
@@ -17,7 +16,7 @@ const transactionSchema = new mongoose.Schema(
             required: true,
         },
         amount:{
-            type: Int16Array,
+            type: String,
             required: true,
         },
         createdAt:{
