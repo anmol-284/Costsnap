@@ -1,5 +1,5 @@
 // import the model
-const user = require('../models/username');
+const user = require('../models/user');
 
 // route handler
 exports.usersignup = async(req, res) => {

@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 
-const transactionSchema = new mongoose.Schema(
+const addinvestment = new mongoose.Schema (
     {
-        amount: {
+        user_name: {
+            type: String,
+            required : true,
+        },
+        stockname:{
             type: String,
             required: true,
         },
-        transactionname:{
-            type:String,
+        quantity: {
+            type: String,
             required: true,
         },
-        category:{
-            type:String,
-            required: true,
-        },
-        user_name:{
+        initialprice: {
             type: String,
             required: true,
         },
@@ -26,4 +26,4 @@ const transactionSchema = new mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+module.exports = mongoose.model("Investment", addinvestment);

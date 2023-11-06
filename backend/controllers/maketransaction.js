@@ -1,12 +1,19 @@
 const mktransaction = require('../models/transaction');
-const user = require('../models/username');
+const user = require('../models/user');
 
 exports.makeTransaction = async(req, res) => {
     try{
-        const {name, uname, transtype, amount} = req.body;
-        const response = await mktransaction.create({name, uname, transtype, amount});
-        const userid = await user.findOne({ username:uname });
+        const {amount, transactionname, category, user_name} = req.body;
+        const response = await mktransaction.create({amount, transactionname, category, user_name});
+
+        const userid = await user.findOne({ username:user_name });
+
+        console.log(userid);
+
+        // add the transaction to user collection
         userid.transactions.push(response);
+        await userid.save();
+
         // send a json response and success flag
         res.status(200).json(
             {
