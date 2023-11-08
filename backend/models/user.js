@@ -19,18 +19,25 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             maxLenth: 50,
-            // unique: true,
+            unique: true,
         },
         email:{
             type: String,
             required: true,
             maxLenth: 50,
-            // unique: true,
+            unique: true,
+        },
+        token: {
+            type:String
         },
         password:{
             type: String,
             required: true,
             minLenth: 8,
+        },
+        verified: {
+            type:Boolean,
+            default:false
         },
         createdAt:{
             type: Date,
