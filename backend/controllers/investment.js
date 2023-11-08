@@ -1,16 +1,12 @@
-const invt = require('../models/stock');
-const user = require('../models/user');
+const invt = require('../models/investmentmodel');
+const user = require('../models/usermodel');
 
-exports.invest = async(req, res) => {
+exports.investment = async(req, res) => {
     try{
-        const {user_name, stockname, quantity, initialprice} = req.body;
-        const investmentd = await invt.create({user_name, stockname, quantity, initialprice});
-
-        // adding to the array
-        const userid = await user.findOne({ username: user_name });
-        userid.investments.push(investmentd);
-        await userid.save();
-        console.log(userid);
+        const {user_name, totalinvestment, currentvalue, stocks, watchlist} = req.body;
+        const investmentd = await invt.create({user_name, totalinvestment, currentvalue, stocks, watchlist});
+        
+        
 
         // send a json response and success flag
         res.status(200).json(

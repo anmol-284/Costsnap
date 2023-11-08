@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema(
     {
-        amount: {
+        user_name:{
             type: String,
             required: true,
         },
@@ -10,12 +10,16 @@ const transactionSchema = new mongoose.Schema(
             type:String,
             required: true,
         },
+        transactiontype:{      // Spend or Income
+            type: String,   
+            required: true,
+        },
         category:{
             type:String,
             required: true,
         },
-        user_name:{
-            type: String,
+        amount: {
+            type: Number,
             required: true,
         },
         createdAt:{

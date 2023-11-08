@@ -2,27 +2,28 @@ const mongoose = require('mongoose');
 
 const dashboardSchema = new mongoose.Schema(
     {
-        user_id:{
-            type:String,
+        user_name:{
+            type: String,
             required: true,
         },
         balance:{
-            type: Int16Array,
+            type: Number,
             required: true,
         },
         income:{
-            type:Int16Array,
+            type: Number,
             required: true,
         },
         expense:{
-            type: Int16Array,
+            type: Number,
             required: true,
+            default: 0,
         },
         savings:{
-            type:Int16Array,
+            type: Number,
             required: true,
         },
     }
 )
 
-module.exports = mongoose.model("dashboard", dashboardSchema);
+module.exports = mongoose.model("Dashboard", dashboardSchema);

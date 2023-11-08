@@ -1,11 +1,18 @@
 // import the model
-const user = require('../models/user');
+const user = require('../models/usermodel');
+const investment = require('../models/investmentmodel');
+const dashboard = require('../models/dashboardmodel');
 
 // route handler
 exports.usersignup = async(req, res) => {
     try{
         const {firstname, lastname, username, email, password} = req.body;
         const response = await user.create({firstname, lastname, username, email, password});
+
+        let user_name = username;
+        await investment.create({user_name});
+        await dashboard.create({user_name});
+        
         // send a json response and success flag
         res.status(200).json(
             {

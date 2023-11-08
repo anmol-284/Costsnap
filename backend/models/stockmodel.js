@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const addinvestment = new mongoose.Schema (
+const addstock = new mongoose.Schema (
     {
         user_name: {
             type: String,
@@ -11,11 +11,11 @@ const addinvestment = new mongoose.Schema (
             required: true,
         },
         quantity: {
-            type: String,
+            type: Number,
             required: true,
         },
-        initialprice: {
-            type: String,
+        purchaseprice: {
+            type: Number,
             required: true,
         },
         createdAt:{
@@ -26,4 +26,4 @@ const addinvestment = new mongoose.Schema (
     }
 )
 
-module.exports = mongoose.model("Investment", addinvestment);
+module.exports = mongoose.model("Stock", addstock);
