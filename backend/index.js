@@ -1,5 +1,12 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const dbconnect = require('./config/database');
+const {userController} = require("./controllers/signup");
+
 const app = express();
+
+app.use(cors());
+app.use(express.urlencoded({extended:true}));
 
 // it is used to import data from .env file
 require('dotenv').config();
@@ -12,15 +19,14 @@ app.use(express.json());
 const route = require('./routes/userroute');
 
 // mounting routes with different versions
-app.use("/api/v1", route);
+app.use("/api/v1", userController);
 
 // start server on Port
 app.listen(PORT, () => {
     console.log(`Server successfully started at ${PORT}`);
 });
 
-// connnecting db
-const dbconnect = require('./config/database');
+// connnecting database
 dbconnect();
 
 // default route
