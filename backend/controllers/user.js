@@ -1,21 +1,25 @@
 // import the model
-const user = require('../models/usermodel');
-const investment = require('../models/investmentmodel');
-const dashboard = require('../models/dashboardmodel');
+const user = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Token = require("../models/token");
 const crypto = require("crypto");
 const Joi = require("joi");
 let sendConfirmationEmail = require("../utils/sendEmail");
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const userOtpVerification = require("../models/userOtpVerification");
+const app = express();
 
 require("dotenv").config();
+
+// Using Cookie parser
+app.use(cookieParser());
 
 // route handler
 exports.usersignup = async(req, res) => {
     try {
         const {firstname, lastname, username, email, password} = req.body;
-        
 
         // finding that user is already registered or not 
         const existingEmail = await user.findOne({email});
@@ -28,48 +32,37 @@ exports.usersignup = async(req, res) => {
             })
         }
 
-
         // Hashing of Password
-        // let hashedPswd;
+        let hashedPswd;
 
-        // try {
-        //     hashedPswd = await bcrypt.hash(password, 10);
-        // }
-        // catch(err) {
-        //     console.error(err);
-        //     console.log(err);
-        //     return res.status(500).json(
-        //         {
-        //             success: false,
-        //             message: "Error in Hashing Password",
-        //         }
-        //     )
-        // }
+        try {
+            hashedPswd = await bcrypt.hash(password, 10);
+        }
+        catch(err) {
+            return res.status(500).json(
+                {
+                    success: false,
+                    message: "Error in Hashing Password",
+                }
+            )
+        }
 
-        // // // created a response with hashed password to post in database
+        // created a response with hashed password to post in database
         // const response = await user.create({firstname, lastname, username, email, password:hashedPswd});
 
-        // Generating a unique Token for the User.
-        // const token = crypto.randomBytes(32).toString('hex');
-
-        // await Token.create({
-        //     userId: username,
-		// 	token: token,
-        // });
-
-        // Saved the user 
+        // Saved User info in Database
         const User = new user({
             firstname, 
             lastname, 
             username, 
             email, 
-            password
+            password:hashedPswd
         });
 
-        await User.save();
-
-        // Sending a confirmation email to the user.
-        sendConfirmationEmail(username, email);
+        await User.save().then((result) => {
+            // Sending a confirmation email to the user.
+            sendConfirmationEmail(result,res);
+        })
 
         // send a json response and success flag
         res.status(201).json({
@@ -91,18 +84,51 @@ exports.usersignup = async(req, res) => {
     }
 }
 
+exports.resendOTP = async (req,res) => {
+    try  {
+        let {userid, email} = req.body;
+
+        if (!userid || !email) {
+            throw Error("Empty user details are not allowed.");
+        }
+
+        else {
+            // delete existing records and resend
+            await userOtpVerification.deleteMany({ userid });
+            sendConfirmationEmail( {_id:userid, email}, res);
+        } 
+
+    }
+    catch(error) {
+        res.json({
+            status: "FAILED",
+            message: error.message,
+        });
+    }
+}
+
 exports.verify = async (req,res) => {
     
     try {
-		let userid = await user.findOne({ username: req.params.id });
+		// let userid = await user.findOne({ username: req.params.id });
+
+        // const cookie_value = cookieParser().get(req, "token");
+        // console.log(cookie_value);
+
+        // let userid = JSON.parse(cookie_value).username;
+        // console.log(userid);
+
+        const cookie_value = req.cookie.token;
+
+        const userid = jwt.verify(cookie_value, process.env.SUPER_SECRET);
 
 		if (!userid) return res.status(400).json({
             success:false,
             message: "Invalid username." 
         });
 
-		const token = await Token.findOne({
-			userId: req.params.id,
+		let token = await Token.findOne({
+			userId: userid,
 			token: req.params.token,
 		});
 
@@ -116,12 +142,7 @@ exports.verify = async (req,res) => {
             verified: true 
         });
 
-		await token.deleteOne();
-
-        
-        let user_name = userid;
-        await investment.create({user_name});
-        await dashboard.create({user_name});
+		// await token.deleteOne();
 
 		res.status(200).json({
             success:true,
@@ -148,8 +169,7 @@ exports.userlogin = async(req, res) => {
         if (!email) {
             return res.status(400).json({
                 success:false,
-                data:req,
-                message:"Please fill out your Email.",
+                message:"Please fill out your Email."
             })
         }
         if (!password) {
@@ -159,18 +179,19 @@ exports.userlogin = async(req, res) => {
             })
         }
 
-        const verified = await user.findOne({email:email});
+        let Verif = await user.findOne({email:email}).populate().exec();
+        console.log(Verif);
 
-        if (!verified) {
+        if (Verif.verified === false) {
             return res.status(400).json({
                 success:false,
-                message:"User is not Verified."
+                message:"User is not Verified, Please verify your Email First."
             })
         }
 
         // check for registered User
         let loginUser = await user.findOne({email});
-
+        
         // if not a registered User
         if (!loginUser) {
             return res.status(401).json({
