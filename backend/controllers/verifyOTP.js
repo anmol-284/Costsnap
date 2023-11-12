@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const user = require("../models/usermodel");
 const bcrypt = require("bcrypt");
 const userOtpVerification = require("../models/userOtpVerification");
 

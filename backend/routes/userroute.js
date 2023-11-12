@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import userModel
-const user = require("../models/user");
+const user = require("../models/usermodel");
 
 // import controller
 const {makeTransaction, getallTransaction, recentTransactions} = require('../controllers/transaction');

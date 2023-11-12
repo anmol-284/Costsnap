@@ -7,11 +7,7 @@ const bcrypt = require('bcrypt');
 require("dotenv").config();
 
 // Sending Conformation mail to user on its email
-<<<<<<< HEAD
-const sendConfirmationEmail = async (username, email,token) => {
-=======
 const sendConfirmationEmail = async ({_id, email}, res) => {
->>>>>>> ec5566e3aabd82c8d7b4a88a7a91842118bc9ea0
     try {
 
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`; 
@@ -29,15 +25,9 @@ const sendConfirmationEmail = async ({_id, email}, res) => {
         const mailOptions = {
             from:process.env.USER,
             to:email,
-<<<<<<< HEAD
-            subject:"Confirm Your Email address.",
-            text:`Please click on the following link to confirm your email address: https://CostSnap.netlify.io/${username}/verify-mail/${token}
-            otp: t7t347t`
-=======
             subject:"Verify Your Email",
             html:`<p>Enter <b>${otp}</b> at CostSnap to verify your Email address and complete your Sign up process now.</p>
             <p>This code <b>expires in 1 hour </b>.</p>`,
->>>>>>> ec5566e3aabd82c8d7b4a88a7a91842118bc9ea0
         };
 
         // hash the Otp

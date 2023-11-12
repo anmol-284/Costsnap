@@ -1,10 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const dbconnect = require('./config/database');
-const {userController} = require("./controllers/signup");
+const {userController} = require("./controllers/user");
 
 const app = express();
-const cors = require('cors');
 
 app.use(cors());
 app.use(express.urlencoded({extended:true}));
@@ -19,10 +18,10 @@ app.use(cors());
 app.use(express.json());
 
 // importing routes
-const route = require('./routes/userroute');
+const router = require('./routes/userroute');
 
 // mounting routes with different versions
-app.use("/api/v1", userController);
+app.use("/api/v1", router);
 
 // start server on Port
 app.listen(PORT, () => {
