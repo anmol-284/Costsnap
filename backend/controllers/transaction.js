@@ -4,15 +4,13 @@ const dashboard = require('../models/dashboardmodel');
 
 exports.makeTransaction = async(req, res) => {
     try{
-        const { user_name, transactionname, transactiontype, amount, category} = req.body;
-        const createdtransaction = await transaction.create({ user_name, transactionname, transactiontype, amount, category});
+        const {transactionname, transactiontype, amount, category} = req.body;
+        const username = req.body.username;
+        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category});
 
-        const userid = await user.findOne({ username:user_name }).populate().exec();
-        const dashboardid =  await dashboard.findOne({ username:user_name }).populate().exec();
+        const dashboardid =  await dashboard.findOne({ username:username }).populate().exec();
 
-        if(userid){
-            userid.transactions.push(createdtransaction);
-            await userid.save();
+        if(dashboardid){
 
             if(type === "Spend"){
                 dashboardid.expense += amount;
@@ -26,7 +24,6 @@ exports.makeTransaction = async(req, res) => {
 
             await dashboardid.save();
             
-            console.log(userid);
         }
 
         // send a json response and success flag
@@ -39,6 +36,61 @@ exports.makeTransaction = async(req, res) => {
         );
     }
     catch(err){
+        console.error(err);
+        console.log(err);
+        res.status(500).json(
+            {
+                success: false,
+                data: "Internal server issue",
+                message: err.message
+            }
+        )
+    }
+}
+
+
+exports.getallTransaction = async(req, res) => {
+    try{
+        const username = req.body.username;
+
+        const alltransactions =  await transaction.find({ username:username }).populate().exec();
+
+        // send a json response and success flag
+        res.status(200).json(
+            {
+                success: true,
+                data: alltransactions,
+                message: "All transactions fetched successfully."
+            }
+        );
+    }
+    catch(err){
+        console.error(err);
+        console.log(err);
+        res.status(500).json(
+            {
+                success: false,
+                data: "Internal server issue",
+                message: err.message
+            }
+        )
+    }
+}
+
+exports.recentTransactions = async (req, res) => {
+    try{
+        const username = req.body.username;
+        const finduser = await investment.find({username:username}).sort({createdAt:-1}).limit(10).populate().exec();
+        
+        if(finduser){
+
+        }else{
+            return res.status(401).json({
+                
+            })
+        }
+
+    } catch(err){
         console.error(err);
         console.log(err);
         res.status(500).json(

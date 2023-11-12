@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const addstock = new mongoose.Schema (
     {
-        user_name: {
+        username: {
             type: String,
             required : true,
         },

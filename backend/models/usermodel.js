@@ -30,18 +30,10 @@ const userSchema = new mongoose.Schema(
             required: true,
             minLenth: 8,
         },
-        transactions: [
-            {
-                type: Object,
-                required: true,
-            }
-        ],
-        holdings: [   
-            {
-                type: Object,
-                required: true,
-            }
-        ],
+        verified: {
+            type:Boolean,
+            default:false
+        },
         groups: [
             {
                 type: String,

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const investSchema = new mongoose.Schema(
     {
-        user_name:{
+        username:{
             type: String,
             required: true,
             maxLenth: 50,

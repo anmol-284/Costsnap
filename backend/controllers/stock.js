@@ -4,35 +4,28 @@ const investment = require('../models/investmentmodel');
 
 exports.addstock = async(req, res) => {
     try{
-        const {user_name, stockname, quantity, purchaseprice} = req.body;
-        const addedstock = await stock.create({user_name, stockname, quantity, purchaseprice});
+        const {username, stockname, quantity, purchaseprice} = req.body;
+        // const addedstock = await stock.create({user_name, stockname, quantity, purchaseprice});
 
-
-        const userid = await user.findOne({ username:user_name }).populate().exec();
-        const investid = await investment.findOne({ user_name:user_name }).populate().exec();
-        // const {totali, curvalue, sts, wlist} = investmentd;
+        const addedstock = {stockname, quantity, purchaseprice, Date};
         
-        if(userid){
-            // const data = {totali, curvalue, sts, wlist};
-            userid.holdings.push(addedstock); 
-            await userid.save();
-            console.log(userid);
-        }
+        const investid = await investment.findOne({ username:username }).populate().exec();
+        
 
         if(investid){
             investid.stocks.push(addedstock);
 
-            // updating totalinvestment value 
-            investid.totalinvestment += quantity*purchaseprice;
+            
+            investid.totalinvestment += quantity*purchaseprice;            // updating totalinvestment value 
 
-            // saving the stock in investmentmodel
-            await investid.save();
+            
+            await investid.save();       // saving the stock in investmentmodel
         }else{
             console.log("Error occured while finding investment db or user in investdb");
         }
 
-        // send a json response and success flag
-        res.status(200).json(
+       
+        res.status(200).json(             // send a json response and success flag
             {
                 success: true,
                 data: addedstock,
