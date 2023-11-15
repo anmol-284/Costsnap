@@ -1,42 +1,40 @@
 import React from 'react';
+import TransactionList from '../data/TransactionList';
 
-import CTAButton from "../components/core/Homepage/Button"
 
+const Transactions = () => {
+ 
 
-const Dashboard = () => {
   return (
    <div>
-    <div className='text-stone-300 flex items-center justify-start '>
-     <h1 className='text-3xl m-auto mt-10'> Dashboard</h1>
-    </div>
-     {/* Section1 => buttons*/}
+     {/* Section 1 => Transactions history*/}
+          <div className='text-stone-300 w-[100vw]   border-b-[1px] border-b-blue-500 '>
+            <h2 className='text-3xl mb-2 mt-10 ml-24 '> Recent Transactions</h2>
+          </div>
 
-     <div className='flex flex-row m-5 p-6 items-center justify-center'>
-     <CTAButton  linkto={"/balance"} className="flex items-center justify-between">
-     <h1 className='text-4xl mt-5'> Balance</h1>
-      <p className='mt-16 text-2xl'>---</p>
-     </CTAButton>
 
-     <CTAButton  linkto={"/income"}>
-     <h1 className='text-4xl mt-5'> Income</h1>
-      <p className='mt-16 text-2xl'>---</p>
-     </CTAButton>
+        {/* Section 2 => Transactions Grid */}
 
-     <CTAButton  linkto={"/expenses"}>
-     <h1 className='text-4xl mt-5'> Expenses</h1>
-      <p className='mt-16 text-2xl'>---</p>
-      </CTAButton>
+        {/* <div className='grid grid-cols-5  m-5  gap-x-2 gap-y-2 grid-flow-row-dense'>
+              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] col-span-5'/>
+              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] row-span-2'/>
+              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] col-span-5 row-span-2'/>
+             
 
-     <CTAButton  linkto={"/savings"}>
-     <h1 className='text-4xl mt-5'> Savings</h1>
-      <p className='mt-16 text-2xl'>---</p>
-      </CTAButton>
-    
-      </div>
-    
-                {/* Section3 => Transactions history*/}
-          <div className='text-stone-300    border-b-[1px] border-b-blue-500 '>
-            <h2 className='text-3xl m-auto mt-10 ml-24 '> Recent Transactions</h2>
+        </div> */}
+
+          <div>
+           {/* Transactions heading */}
+           <div className='text-neutral-200 text-lg font-bold grid grid-cols-4  m-7 pl-16 pr-20 grid-flow-row-dense  '>
+            <span><h2>Date</h2></span>
+              <span><h2>Description</h2></span>
+             <span><h2>Amount</h2></span>
+             <span><h2>Status</h2></span>
+             
+           </div>
+           
+           <TransactionList/>
+
           </div>
 
       </div>
@@ -45,5 +43,5 @@ const Dashboard = () => {
   );
 };
 
-export default  Dashboard;
+export default Transactions;
 
