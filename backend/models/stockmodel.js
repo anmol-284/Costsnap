@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const addstock = new mongoose.Schema (
+const stock = new mongoose.Schema (
     {
         username: {
             type: String,
@@ -10,11 +10,15 @@ const addstock = new mongoose.Schema (
             type: String,
             required: true,
         },
-        quantity: {
+        transactiontype:{
+            type: String,         // Buy or Sell
+            required: true,
+        },
+        unitprice: {
             type: Number,
             required: true,
         },
-        purchaseprice: {
+        amount: {
             type: Number,
             required: true,
         },
@@ -26,4 +30,4 @@ const addstock = new mongoose.Schema (
     }
 )
 
-module.exports = mongoose.model("Stock", addstock);
+module.exports = mongoose.model("Stock", stock);

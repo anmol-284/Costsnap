@@ -6,6 +6,8 @@ import Transactions from './pages/Transactions'
 import SplitBills from './pages/SplitBills';
 import Investments from './pages/Investments';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -32,6 +34,14 @@ function App() {
            <Route
              path ="settings"
              element={<Settings/>}
+          />
+          <Route 
+            path = "login"
+            element={<Login/>}
+          />
+          <Route 
+            path = "signup"
+            element={<Signup/>}
           />
         </Routes>
     </div>

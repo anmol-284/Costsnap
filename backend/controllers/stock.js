@@ -2,34 +2,85 @@ const stock = require('../models/stockmodel');
 const user = require('../models/usermodel');
 const investment = require('../models/investmentmodel');
 
-exports.addstock = async(req, res) => {
+exports.stocktransaction = async(req, res) => {
     try{
-        const {username, stockname, quantity, purchaseprice} = req.body;
-        // const addedstock = await stock.create({user_name, stockname, quantity, purchaseprice});
-
-        const addedstock = {stockname, quantity, purchaseprice, Date};
+        let {username, stockname,transactiontype, unitprice, amount} = req.body;
+        await stock.create({username, stockname, transactiontype, unitprice, amount});
         
         const investid = await investment.findOne({ username:username }).populate().exec();
-        
+        console.log(investid);
 
         if(investid){
-            investid.stocks.push(addedstock);
+            if(transactiontype === "Buy"){
+                
+                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+                let units = amount/unitprice;
+        
+                if(index !== -1){                                         // if stock is already present then update the values
+                    investid.holdings[index].units += units;
+                    investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + amount) / investid.holdings[index].units;
+                    investid.holdings[index].amount += amount;
+                }else{                                                   // stock not present then add it to holdings
+                    investid.holdings.push({
+                        stockname:stockname,
+                        units:units,
+                        averageprice: amount/units,
+                        amount:amount,
+                    });
+                    
+                }
 
-            
-            investid.totalinvestment += quantity*purchaseprice;            // updating totalinvestment value 
+                investid.totalinvestment += amount;            // updating totalinvestment value
 
-            
-            await investid.save();       // saving the stock in investmentmodel
+            }else if(transactiontype === "Sell"){
+                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+                let units = amount/unitprice;
+
+                if(index !== -1){
+                    if(investid.holdings[index].units < units){
+                        return res.status(401).json({
+                            success:false,
+                            message:"No. of units sold are greater than units bought initially in the stock."
+                        })
+                    }else if(investid.holdings[index].units === units){
+                        investid.totalinvestment -= investid.holdings[index].averageprice * units; 
+                        investid.holdings.splice(index, 1);
+                        await investid.holdings.findByIdAndDelete(investid.holdings[index]._id);
+                        return res.status(200).json({
+                            success:true,
+                            message:"All units of that stock sold.",
+                        })
+                    }else{
+                        investid.holdings[index].units -= units;
+                        investid.holdings[index].amount -= investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
+                        investid.totalinvestment -= investid.holdings[index].averageprice * units; 
+                    }
+    
+                    }
+                
+                    
+
+                }else{
+
+                    return res.status(401).json({
+                        success:false,
+                        message:"Stock not found."
+                    })
+
+                }
+
         }else{
             console.log("Error occured while finding investment db or user in investdb");
         }
+
+        await investid.save();       // saving the stock in investmentmodel
 
        
         res.status(200).json(             // send a json response and success flag
             {
                 success: true,
-                data: addedstock,
-                message: "Entry Created Successfully"
+                data: stock,
+                message: "Stocktransaction Created Successfully"
             }
         );
     }
@@ -45,6 +96,30 @@ exports.addstock = async(req, res) => {
 } 
 
 
-exports.update = async(req, res) => {
-    
+exports.stocktransactionhistory = async(req, res) => {
+    try{
+        const username = req.body.username;
+
+        const stocktransactionhistory =  await stock.find({ username:username }).sort({createdAt:-1}).populate().exec();
+
+        // send a json response and success flag
+        res.status(200).json(
+            {
+                success: true,
+                data: stocktransactionhistory,
+                message: "All investments fetched successfully."
+            }
+        );
+    }
+    catch(err){
+        console.error(err);
+        console.log(err);
+        res.status(500).json(
+            {
+                success: false,
+                data: "Internal server issue",
+                message: err.message
+            }
+        )
+    }
 }

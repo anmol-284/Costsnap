@@ -1,4 +1,6 @@
 const user = require("../models/usermodel");
+const transaction = require("../models/transactionmodel");
+const investment = require("../models/investmentmodel");
 const bcrypt = require("bcrypt");
 const userOtpVerification = require("../models/userOtpVerification");
 
@@ -42,6 +44,9 @@ exports.verifyOTP = async(req, res) => {
                     else {
                         // success -> both the otp got matched up
                         await user.updateOne( {_id: userid}, {verified: true});
+                        const username = await user.findOne({_id: userid});
+                        await transaction.create({username: username});         // creating a transaction for user
+                        await investment.create({username: username});          // creating an investment for user
                         userOtpVerification.deleteMany({ userid });
                         res.json({
                             status:"VERIFIED",

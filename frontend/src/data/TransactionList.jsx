@@ -5,10 +5,16 @@ const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     // Fetch transactions from the backend API
-    fetch('/api/transactions')
+    fetch('http://localhost:8000/api/v1/getalltransactions',{
+      method:'GET',
+      headers: {
+        'Authorisation': `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
-      .then((data) => setTransactions(data))
+      .then((response) => setTransactions(response.data))
       .catch((error) => console.error('Error fetching transactions:', error));
   }, []);
 
@@ -20,10 +26,10 @@ const TransactionList = () => {
           <div
             key={transaction._id}
             className="bg-white p-4 border rounded shadow-md" >
-             <span><p>{transaction.date}</p></span>
-            <span><p className="text-gray-700">{transaction.description}</p></span>
+             <span><p>{transaction.createdAt}</p></span>
+            <span><p className="text-gray-700">{transaction.transactionname}</p></span>
             <span><p className="text-lg font-semibold text-green-600">  ${transaction.amount} </p></span>
-            <span><p>{transaction.status}</p></span>
+            <span><p>{transaction.category}</p></span>
              
           </div>
         ))}
