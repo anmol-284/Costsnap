@@ -2,8 +2,7 @@ import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import CTAButton from "../components/core/Homepage/Button"
-import {AiOutlineDollar} from 'react-icons/fa';
-import FinancialChart from '../data/FinancialChart';
+
 
 const Dashboard = () => {
   return (

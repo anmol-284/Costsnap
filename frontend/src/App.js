@@ -6,6 +6,17 @@ import Transactions from './pages/Transactions'
 import SplitBills from './pages/SplitBills';
 import Investments from './pages/Investments';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import About from './SettingPages/About';
+import ExportData from './SettingPages/ExportData';
+import Help from './SettingPages/Help';
+import Notifications from './SettingPages/Notifications';
+import Theme from './SettingPages/Theme';
+import AddTransaction from './InvestPages/AddTransaction';
+import ViewTransaction from './InvestPages/ViewTransaction';
+import ForgetPassword from './login/ForgetPassword';
+import ConfirmPassword from './login/ConfirmPassword';
 
 function App() {
   return (
@@ -32,6 +43,61 @@ function App() {
            <Route
              path ="settings"
              element={<Settings/>}
+          />
+
+         <Route
+             path ="login"
+             element={<Login/>}
+          />
+
+          <Route
+             path ="signup"
+             element={<Signup/>}
+          />
+
+           <Route
+             path ="about"
+             element={<About/>}
+          />
+
+          <Route
+             path ="exportdata"
+             element={<ExportData/>}
+          />
+
+          <Route
+             path ="help"
+             element={<Help/>}
+          />
+
+          <Route
+             path ="notifications"
+             element={<Notifications/>}
+          />
+
+          <Route
+             path ="theme"
+             element={<Theme/>}
+          />
+
+         
+         <Route
+             path ="addtransaction"
+             element={<AddTransaction/>}
+          />
+
+         <Route
+             path ="viewtransaction"
+             element={<ViewTransaction/>}
+          />
+         
+         <Route
+             path ="forgetpassword"
+             element={<ForgetPassword/>}
+          />
+            <Route
+             path ="confirmpassword"
+             element={<ConfirmPassword/>}
           />
         </Routes>
     </div>

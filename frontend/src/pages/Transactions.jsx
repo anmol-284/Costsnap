@@ -13,15 +13,6 @@ const Transactions = () => {
           </div>
 
 
-        {/* Section 2 => Transactions Grid */}
-
-        {/* <div className='grid grid-cols-5  m-5  gap-x-2 gap-y-2 grid-flow-row-dense'>
-              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] col-span-5'/>
-              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] row-span-2'/>
-              <div className='bg-red-500 rounded-lg shadow-xl min-h-[50px] col-span-5 row-span-2'/>
-             
-
-        </div> */}
 
           <div>
            {/* Transactions heading */}
@@ -29,7 +20,7 @@ const Transactions = () => {
             <span><h2>Date</h2></span>
               <span><h2>Description</h2></span>
              <span><h2>Amount</h2></span>
-             <span><h2>Status</h2></span>
+             <span><h2>Category</h2></span>
              
            </div>
            

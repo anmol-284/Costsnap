@@ -12,7 +12,7 @@ const Navbar = () => {
     <div    style={{ boxShadow: '0 6px 8px rgba(0, 0, 0, 0.1)' }}>
       {/* Nav Links */}
       <div
-        className='bg-gradient-to-r from-blue-400 to-purple-400 text-white w-60 h-52 flex items-center justify-center'
+        className='bg-gradient-to-r from-blue-400 to-purple-400 text-white w-60 h-44 flex items-center justify-center'
         style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
       >
         <p className='text-4xl font-bold'>CostSnap</p>

@@ -23,7 +23,7 @@ const TransactionList = () => {
              <span><p>{transaction.date}</p></span>
             <span><p className="text-gray-700">{transaction.description}</p></span>
             <span><p className="text-lg font-semibold text-green-600">  ${transaction.amount} </p></span>
-            <span><p>{transaction.status}</p></span>
+            <span><p>{transaction.Category}</p></span>
              
           </div>
         ))}
