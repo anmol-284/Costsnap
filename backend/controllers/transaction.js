@@ -107,7 +107,7 @@ exports.recentTransactions = async (req, res) => {
     }
 }
 
-exports.updateTransaction = async (req, res) => {
+exports.updateTransaction = async (req, res) => {            // expenses to be updated
     try{
 
         const {id} = req.params;
@@ -150,6 +150,20 @@ exports.deleteTransaction = async (req, res) => {
         const {id} = req.params;
 
         const deletetransaction = await transaction.findByIdAndDelete(id);
+
+        const dashboardid =  await dashboard.findOne({ username:username }).populate().exec();
+
+        if(deletetransaction.transactiontype === "Spend"){
+            dashboardid.expense -= amount;
+            dashboardid.balance += amount;
+        }else if(deletetransaction.transactiontype === "Income"){
+            dashboardid.income -= amount;
+            dashboardid.balance -= amount;
+        }else {
+            console.log("Transaction type INvalid");
+        }
+
+        await dashboardid.save();
 
         if(!deletetransaction){
             return res.status(401).json({

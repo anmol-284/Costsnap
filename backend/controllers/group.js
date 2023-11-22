@@ -22,11 +22,11 @@ exports.createGroup = async(req,res) => {
 
         // grpMembers = validUsers;
         let splits = [];
-        for(let i = 0; i < validUsers.length; i++){
+        for(let i = 0; i < validUsers.length; i++) {
             let username;
             let settlement = [];
             for(let j = 0; j < validUsers.length; j++){
-                if(j !== i){
+                if(j !== i) {
                     username = validUsers[j];
                     settlement.push(username);
                 }
@@ -130,7 +130,7 @@ exports.addbill = async(req, res) => {
                 }
             }else{
                 let k = 0;
-                for(let j = 0; j < grp.grpMembers[i].settlement.length; j++){      // column-wise
+                for(let j = 0; j < grp.grpMembers[i].settlement.length; j++) {      // column-wise
                     if(share[k].username !== paidby){
                         grp.grpMembers[i].settlement[j].share -= share[k].shareamount;
                     }else{

@@ -32,6 +32,7 @@ exports.getinvestment = async(req, res) => {
         const username  = req.body.username;
 
         const finduser = await invt.findOne({username:username}).populate().exec();
+        // console.log(finduser);
 
         if(finduser){
             return res.status(200).json({

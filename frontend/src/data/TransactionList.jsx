@@ -19,21 +19,20 @@ const TransactionList = () => {
   }, []);
 
   return (
-    <div>
+    <div className='ml-10'>
       {/* <h2 className="text-2xl font-bold mb-4">Transaction List</h2> */}
-      <div className="text-neutral-200 text-lg  grid grid-cols-4  m-7 pl-16 pr-20 grid-flow-row-dense ">
-        {transactions.map((transaction) => (
-          <div
-            key={transaction._id}
-            className="bg-white p-4 border rounded shadow-md" >
-             <span><p>{transaction.createdAt}</p></span>
-            <span><p className="text-gray-700">{transaction.transactionname}</p></span>
-            <span><p className="text-lg font-semibold text-green-600">  ${transaction.amount} </p></span>
-            <span><p>{transaction.category}</p></span>
-             
-          </div>
-        ))}
-      </div>
+      <div className="text-neutral-200 text-lg gap-4">
+  {Array.isArray(transactions) && transactions.map((transaction) => (
+    <div
+      key={transaction._id}
+      className="grid grid-cols-4 p-2 shadow-md">
+      <p>{transaction.createdAt}</p>
+      <p className="text-gray-200">{transaction.transactionname}</p>
+      <p className="text-lg text-gray-400">{transaction.category}</p>
+      <p className="text-lg text-green-600">${transaction.amount}</p>
+    </div>
+  ))}
+</div>
     </div>
   );
 };

@@ -56,7 +56,7 @@ exports.stocktransaction = async(req, res) => {
                         investid.totalinvestment -= investid.holdings[index].averageprice * units; 
                     }
     
-                    }
+                }      // else index === -1
                 
                     
 

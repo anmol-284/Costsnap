@@ -13,6 +13,7 @@ const {createGroup, addbill, addusers} = require("../controllers/group");
 const {splitBill} = require("../controllers/split");
 const {groupBills} = require("../controllers/groupbills");
 const {verifyOTP} = require("../controllers/verifyOTP");
+const {forgot} = require("../controllers/forgot");
  
 const {auth} = require('../middlewares/Auth');
 
@@ -53,12 +54,13 @@ router.post("/splitbills", splitBill);
 router.post("/groupbills", groupBills);
 router.post("/addbill", addbill);
 router.post("/addusers", addusers);
+router.post("/forgot", forgot);
 
 
 router.get("/verify/:token/", verify);
 router.get("/getalltransactions",auth, getallTransaction);
 router.get("/recenttransactions", auth, recentTransactions);
-router.get("/getinvestment", getinvestment);
+router.get("/getinvestment",auth, getinvestment);
 router.get("/stocktransactionhistory", stocktransactionhistory);
 
 router.put("/updatetransactions/:id", updateTransaction);

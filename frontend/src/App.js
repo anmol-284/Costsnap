@@ -8,14 +8,19 @@ import Investments from './pages/Investments';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Dashboard from './login/Dashboard';
 
 function App() {
   return (
-    <div className='w-screen min-h-screen bg-customColor flex flex-row font-inte '>
+    <div className='w-screen min-h-screen bg-customColor flex flex-col font-inte '>
        
        <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route
+             path ="dashboard"
+             element={<Dashboard/>}
+          />
           <Route
              path ="transactions"
              element={<Transactions/>}

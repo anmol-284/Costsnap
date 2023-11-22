@@ -1,4 +1,4 @@
-const Split = require("../models/split");
+// const Split = require("../models/split");
 const user = require("../models/usermodel");
 const Group = require("../models/groupmodel");
 

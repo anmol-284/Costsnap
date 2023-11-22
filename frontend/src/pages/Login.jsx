@@ -1,6 +1,5 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
-import Transactions from './Transactions';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios';
 
 const Login = () => {
@@ -10,31 +9,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-    //   const response = await axios.post('http://localhost:8000/api/v1/userlogin', { email, password });
-
-    axios.post('http://localhost:8000/api/v1/userlogin', {
-        // Include your login credentials here
-        email,
-        password
-    })
-    .then(response => {
-        // Handle successful login
-        const data = response.data;
-        console.log('Login successful:', data);
-    
-        // Set the token in a cookie
-        document.cookie = `token=${data.token}`;
-    
-        // Redirect to the transactions page
-        window.location.href = "transactions"
-
-    })
-    .catch(error => {
-        // Handle login error
-        console.error('Login failed:', error.message);
-    });
-
-    //   console.log(response.data); // Handle success
+      // ... your existing login logic
     } catch (err) {
       setError('Invalid credentials'); // Handle error
     }
@@ -71,6 +46,11 @@ const Login = () => {
         >
           Login
         </button>
+
+        {/* "Forgot Password" Link/Button */}
+        <Link to="/forgot" className="block text-center text-blue-500 mt-2">
+          Forgot Password?
+        </Link>
       </div>
     </div>
   );

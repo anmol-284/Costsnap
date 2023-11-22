@@ -2,12 +2,12 @@ import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import HighlightText from '../components/core/Homepage/HighlightText';
-import CTAButton from "../components/core/Homepage/Button"
+import CTAButton from "../components/core/Homepage/Button";
 
 
 const Home = () => {
   return (
-    <div>
+    <div className='ml-60'>
       Section1
       <div className='  relative mx-auto flex flex-col w-11/12  max-w-maxContent items-center text-white justify-between'>
         <Link to={"/signup"} className="t ">
@@ -32,10 +32,30 @@ const Home = () => {
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus accusantium ratione nostrum eius deleniti suscipit, ex nihil velit quam? Quod atque repudiandae et provident labore, ad illum minima consectetur exercitationem?
       </div>
 
+      <div className='text-center text-2xl font-semibold mt-6'>
+        Empower Your Future with 
+        <HighlightText text={"Money Savings , Expenses & Investments"}/>
+      </div>
+
+      <div className=' mt-4  w-[90%] text-center text-lg font-bold text-slate-300 '>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus accusantium ratione nostrum eius deleniti suscipit, ex nihil velit quam? Quod atque repudiandae et provident labore, ad illum minima consectetur exercitationem?
+      </div>
+
+      <div className='text-center text-2xl font-semibold mt-6'>
+        Empower Your Future with 
+        <HighlightText text={"Money Savings , Expenses & Investments"}/>
+      </div>
+
+      <div className=' mt-4  w-[90%] text-center text-lg font-bold text-slate-300 '>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus accusantium ratione nostrum eius deleniti suscipit, ex nihil velit quam? Quod atque repudiandae et provident labore, ad illum minima consectetur exercitationem?
+      </div>
+
       <div className='flex flex-row gap-7 mt-8'>
         <CTAButton active={true} linkto={"/signup"}>Know More</CTAButton>
 
         <CTAButton active={false} linkto={"/login"}>Login</CTAButton>
+
+        <CTAButton active={false} linkto={"/dashboard"}>Dashboard</CTAButton>
      
       </div>
 
