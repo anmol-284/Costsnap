@@ -19,11 +19,9 @@ exports.makeTransaction = async(req, res) => {
                 dashboardid.income += amount;
                 dashboardid.balance += amount;
             }else {
-                console.log("Transaction type INvalid");
+                console.log("Transaction type InValid");
             }
-
             await dashboardid.save();
-            
         }
 
         // send a json response and success flag

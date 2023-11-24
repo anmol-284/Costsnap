@@ -20,6 +20,7 @@ exports.auth = (req,res,next) => {
             console.log(decode);
 
             req.body.username = decode.username;
+            req.body._id = decode.id;
             console.log(req.body);
         }
         catch(error) {
