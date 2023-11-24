@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const ViewTransaction = () => {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    // Fetch transactions from the backend API using axios
-    axios.get('/api/transactions')
-      .then((response) => setTransactions(response.data))
-      .catch((error) => console.error('Transactions not found:', error));
+    const fetchTransactions = async () => {
+      try {
+        const response = await fetch('/api/transactions');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const transactionsData = await response.json();
+        setTransactions(transactionsData);
+      } catch (error) {
+        console.error('Transactions not found:', error.message);
+      }
+    };
+
+    fetchTransactions();
   }, []);
 
   return (
@@ -21,7 +32,7 @@ const ViewTransaction = () => {
       <div className='text-neutral-200 text-lg grid grid-cols-5 m-5 pl-10 pr-[350px]'>
         <span><h2>Transaction Type</h2></span>
         <span><h2>TimeStamp</h2></span>
-        <span><h2>stock Name</h2></span>
+        <span><h2>Stock Name</h2></span>
         <span><h2>Unit Price</h2></span>
         <span><h2>Amount</h2></span>
       </div>

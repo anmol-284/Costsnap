@@ -7,15 +7,34 @@ const Investments = () => {
   const [holdings, setHoldings] = useState([]);
 
   useEffect(() => {
-    // Fetch investments from the backend API
-    axios.get('/api/investments')
-      .then((response) => setInvestments(response.data))
-      .catch((error) => console.error('Error fetching investments:', error));
+    const fetchInvestments = async () => {
+      try {
+        const response = await fetch('/api/investments');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const investmentsData = await response.json();
+        setInvestments(investmentsData);
+      } catch (error) {
+        console.error('Error fetching investments:', error);
+      }
+    };
 
-    // Fetch holdings from the backend API
-    axios.get('/api/holdings')
-      .then((response) => setHoldings(response.data))
-      .catch((error) => console.error('Error fetching holdings:', error));
+    const fetchHoldings = async () => {
+      try {
+        const response = await fetch('/api/holdings');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const holdingsData = await response.json();
+        setHoldings(holdingsData);
+      } catch (error) {
+        console.error('Error fetching holdings:', error);
+      }
+    };
+
+    fetchInvestments();
+    fetchHoldings();
   }, []);
 
 

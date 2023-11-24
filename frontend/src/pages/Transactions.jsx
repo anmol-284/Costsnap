@@ -1,5 +1,6 @@
 import React from 'react';
 import TransactionList from '../data/TransactionList';
+import PieChart from './PieChart';
 
 
 const Transactions = () => {
@@ -12,8 +13,8 @@ const Transactions = () => {
             <h2 className='text-3xl mb-2 mt-10 ml-24 '> Recent Transactions</h2>
           </div>
 
-
-
+          <PieChart/>
+          
           <div>
            {/* Transactions heading */}
            <div className='text-neutral-200 text-lg font-bold grid grid-cols-4  m-7 pl-16 pr-20 grid-flow-row-dense  '>

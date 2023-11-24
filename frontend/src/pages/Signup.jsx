@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const Signup = () => {
   const [firstname, setFirstName] = useState('');
@@ -11,16 +10,35 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post('/api/signup', { firstname,lastname,username, email, password });
-      console.log(response.data); // Handle success
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          username,
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Signup successful:', data);
     } catch (err) {
-      setError('Signup failed'); // Handle error
+      console.error('Signup failed:', err.message);
+      setError('Signup failed');
     }
   };
 
   return (
-    <div >
-      <div className=" p-10 bg-white shadow-md rounded w-[450px] h-[600px] mt-[70px] ml-[400px]">
+    <div>
+      <div className="p-10 bg-white shadow-md rounded w-[450px] h-[600px] mt-[70px] ml-[400px]">
         <h2 className="text-2xl font-semibold mb-4">Signup</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="mb-4">

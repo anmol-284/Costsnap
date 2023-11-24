@@ -1,7 +1,8 @@
 import './App.css';
 import Navbar from './components/common/Navbar';
 import Home from './pages/Home'
-import {Routes,Route} from "react-router-dom"
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Transactions from './pages/Transactions'
 import SplitBills from './pages/SplitBills';
 import Investments from './pages/Investments';
@@ -17,6 +18,7 @@ import AddTransaction from './InvestPages/AddTransaction';
 import ViewTransaction from './InvestPages/ViewTransaction';
 import ForgetPassword from './login/ForgetPassword';
 import ConfirmPassword from './login/ConfirmPassword';
+import GroupView from './SplitPages/GroupView';
 
 function App() {
   return (
@@ -98,6 +100,11 @@ function App() {
             <Route
              path ="confirmpassword"
              element={<ConfirmPassword/>}
+          />
+
+          <Route
+             path ="group-view"
+             element={<GroupView/>}
           />
         </Routes>
     </div>

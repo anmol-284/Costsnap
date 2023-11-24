@@ -15,20 +15,7 @@ return (
 
 
       <div className='text-2xl flex flex-col justify-center ml-56 '>
-        {/* Theme Section */}
-      <div className='flex flex-row items-center  p-12 m-2 bg-slate-900 w-[1000px] h-24 border-[1px] border-solid rounded-lg '>
-        <h2>Theme </h2>
-        <Link to={"/theme"} className=" hover:text-blue-700 ml-[760px]">
-          < FaGreaterThan />  </Link>
-
-      </div>
-
-
-      {/* Notification Section */}
-      <div className='flex flex-row items-center  p-12 m-2 bg-slate-900 w-[1000px] h-24 border-[1px] border-solid rounded-lg '>
-        <h2>Notifications </h2>
-        <Link to={"/notifications"} className=" hover:text-blue-700 ml-[700px]">< FaGreaterThan /></Link>
-      </div>
+      
 
       {/* Export Data Section */}
       <div className='flex flex-row items-center  p-12 m-2 bg-slate-900 w-[1000px] h-24 border-[1px] border-solid rounded-lg '>
