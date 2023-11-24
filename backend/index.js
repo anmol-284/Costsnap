@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const dbconnect = require('./config/database');
 const {userController} = require("./controllers/user");
 
@@ -16,6 +17,9 @@ app.use(cors());
 
 // to parse the data
 app.use(express.json());
+
+
+app.use(bodyParser.json());
 
 // importing routes
 const router = require('./routes/userroute');

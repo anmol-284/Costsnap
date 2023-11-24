@@ -2,12 +2,12 @@ import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import HighlightText from '../components/core/HighlightText';
-import CTAButton from "../components/core/Button"
+import CTAButton from "../components/core/Button";
 
 
 const Home = () => {
   return (
-    <div>
+    <div className='ml-60'>
       Section1
       <div className='  relative mx-auto flex flex-col w-11/12  max-w-maxContent items-center text-white justify-between'>
         <Link to={"/expenses"} className="t ">

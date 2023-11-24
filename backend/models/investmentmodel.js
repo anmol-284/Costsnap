@@ -15,15 +15,27 @@ const investSchema = new mongoose.Schema(
             required: true,
             default:0,
         },
-        currentvalue: {
-            type: Number,
-            required: true,
-            default:0,
-        },
-        stocks:[
+        holdings:[
             {
-                type: Object,
-                required: true,
+                stockname:{
+                    type:String,
+                    required:true,
+                },
+                units:{
+                    type:Number,
+                    required:true,
+                    default:0,
+                },
+                averageprice:{
+                    type:Number,
+                    required: true,
+                    default:0,
+                },
+                amount:{
+                    type:Number,
+                    required:true,
+                    default:0,
+                },
             }
         ],
         watchlist:[

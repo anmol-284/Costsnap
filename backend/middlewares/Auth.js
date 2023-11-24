@@ -3,23 +3,27 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.auth = (req,res,next) => {
+    // console.log(req.headers);
+    // console.log(req.headers["authorisation"].split("Bearer ")[1]);
     try {
-        // extracting jwt token using two ways
-        const token = req.body.token || req.cookies.token;
+        // extracting jwt token using authorisation in header
+        let token = req.headers["authorisation"].split("Bearer ")[1] ;
+        // let token = req.body.token;
 
         if (!token) {
             return res.status(401).json({
                 success:false,
-                message:"Your Token is Missing. Please Try Again."
+                message:"Your token is missing. Please Try Again."
             });
         }
 
         // Verifying Token
         try {
             const decode = jwt.verify(token, process.env.SUPER_SECRET);
+            console.log("Token decoded is ");
             console.log(decode);
 
-            req.body.username = decode.username;
+            req.body.username = decode.username;       // adding username to request body
             console.log(req.body);
         }
         catch(error) {
@@ -31,6 +35,7 @@ exports.auth = (req,res,next) => {
         next();               // used to move to next middleware
     }
     catch(error) {
+        console.log(error);
         res.status(401).json({
             success:false,
             message:"Something went wrong while verifying the token."
