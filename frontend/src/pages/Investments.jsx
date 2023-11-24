@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CTAButton from "../components/core/Homepage/Button"
+import axios from 'axios';
 
 const Investments = () => {
 
@@ -8,28 +8,18 @@ const Investments = () => {
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     // Fetch transactions from the backend API
-    fetch('http://localhost:8000/api/v1/getinvestment', {
-      method: 'GET',
+    axios.get('http://localhost:8000/api/v1/getinvestment', {
       headers: {
         'Authorisation': `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
-      .then((response) => setInvestments(response.data))
+      .then((response) => {
+        setInvestments(response.data);
+        console.log(response.data);
+      })
       .catch((error) => console.error('Error fetching investments:', error));
       console.log("Fetched successfully");
   }, []);
-
-
-  // const [holdings, setHoldings] = useState([]);
-
-  // useEffect(() => {
-  //   // Fetch transactions from the backend API
-  //   fetch('/api/holdings')
-  //     .then((response) => response.json())
-  //     .then((data) => setHoldings(data))
-  //     .catch((error) => console.error('Error fetching holdings:', error));
-  // }, []);
 
 
   return (
@@ -65,7 +55,7 @@ const Investments = () => {
         </div>
 
         {investments && investments.holdings && (
-          <div key={investments._id} className='grid grid-cols-4 '>
+          <div key={investments._id} className='grid grid-cols-4 text-neutral-200'>
 
 
             <p className='ml-12 p-4 text-2xl'>{investments.totalinvestment.toFixed(2)}</p>

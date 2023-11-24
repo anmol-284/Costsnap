@@ -16,6 +16,7 @@ const {verifyOTP} = require("../controllers/verifyOTP");
 const {forgot} = require("../controllers/forgot");
  
 const {auth} = require('../middlewares/Auth');
+const { expenseByCategory } = require('../controllers/expense');
 
 //define api route
 
@@ -62,6 +63,7 @@ router.get("/getalltransactions",auth, getallTransaction);
 router.get("/recenttransactions", auth, recentTransactions);
 router.get("/getinvestment",auth, getinvestment);
 router.get("/stocktransactionhistory", stocktransactionhistory);
+router.get("/expensebycategory", auth, expenseByCategory);
 
 router.put("/updatetransactions/:id", updateTransaction);
 

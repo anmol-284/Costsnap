@@ -9,6 +9,7 @@ exports.forgot = async (req, res) => {
   try {
     const foundUser = await user.findOne({ email });
 
+    
     if (!foundUser) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }

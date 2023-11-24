@@ -9,7 +9,23 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      // ... your existing login logic
+      axios.post('http://localhost:8000/api/v1/userlogin', {
+        email, password
+      })
+        .then(response => {
+          
+          const data = response.data;
+          console.log('Login successful:', data);
+
+          // Set the token in a cookie
+          document.cookie = `token=${data.token}`;
+
+          // Redirect to the transactions page
+          window.location.href = 'transactions';
+        })
+        .catch(error => {
+          console.error('Login failed:', error.message);
+        });
     } catch (err) {
       setError('Invalid credentials'); // Handle error
     }

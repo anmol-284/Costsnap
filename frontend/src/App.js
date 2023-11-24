@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './login/Dashboard';
+import DonutChart from './data/piechart';
 
 function App() {
   return (
@@ -47,6 +48,10 @@ function App() {
           <Route 
             path = "signup"
             element={<Signup/>}
+          />
+          <Route 
+            path = "piechart"
+            element={<DonutChart/>}
           />
         </Routes>
     </div>
