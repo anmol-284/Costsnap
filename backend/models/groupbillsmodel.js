@@ -2,25 +2,35 @@ const mongoose = require('mongoose');
 
 const grpBillSchema = new mongoose.Schema(
     {
-        grpName: {
+        groupName: {
             type: String,
             required: true,
         },
-        totalInitialExp: {
-            type: Number,
-            required: true,
-        },
-        expPoint: {
+        billname: {
             type:String,
             required:true,
         },
-        exptype: {
+        totalExpenditure: {
+            type: Number,
+            required: true,
+        },
+        category: {
             type: String,
             required: true,
         },
-        username: [{
-            type: String,
-            required:true,
+        paidby:{
+            type:String,
+            required: true,
+        },
+        share: [{
+            username:{
+                type:String,
+                required: true,
+            },
+            shareamount:{
+                type:Number,
+                required:true,
+            },
         }],
         createdAt:{
             type: Date,
@@ -35,4 +45,4 @@ const grpBillSchema = new mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model("grpBill", grpBillSchema);
+module.exports = mongoose.model("groupBill", grpBillSchema);

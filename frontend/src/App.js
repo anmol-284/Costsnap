@@ -6,14 +6,23 @@ import Transactions from './pages/Transactions'
 import SplitBills from './pages/SplitBills';
 import Investments from './pages/Investments';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './login/Dashboard';
+import DonutChart from './data/piechart';
+import EmailVerificationPage from './signup/Otpverify'
 
 function App() {
   return (
-    <div className='w-screen min-h-screen bg-customColor flex flex-row font-inte '>
+    <div className='w-screen min-h-screen bg-customColor flex flex-col font-inte '>
        
        <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route
+             path ="dashboard"
+             element={<Dashboard/>}
+          />
           <Route
              path ="transactions"
              element={<Transactions/>}
@@ -32,6 +41,22 @@ function App() {
            <Route
              path ="settings"
              element={<Settings/>}
+          />
+          <Route 
+            path = "login"
+            element={<Login/>}
+          />
+          <Route 
+            path = "signup"
+            element={<Signup/>}
+          />
+          <Route
+             path ="piechart"
+             element={<DonutChart/>}
+          />
+          <Route
+             path ="otpverify"
+             element={<EmailVerificationPage/>}
           />
         </Routes>
     </div>

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const dashboardSchema = new mongoose.Schema(
     {
-        user_name:{
+        username:{
             type: String,
             required: true,
         },

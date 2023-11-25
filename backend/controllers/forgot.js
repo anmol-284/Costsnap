@@ -1,6 +1,6 @@
-const user = require("../models/usermodel");
+const user = require('../models/usermodel');
 const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
 exports.forgot = async (req, res) => {
@@ -10,13 +10,9 @@ exports.forgot = async (req, res) => {
     const foundUser = await user.findOne({ email });
 
     if (!foundUser) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
-    const token = jwt.sign({ id: foundUser._id }, process.env.SUPER_SECRET, {
-      expiresIn: "1hr",
-    });
+    const token = jwt.sign({id: foundUser._id}, process.env.SUPER_SECRET, {expiresIn: "1hr"})
 
     const transporter = nodemailer.createTransport({
       service: process.env.SERVICE,
@@ -31,27 +27,21 @@ exports.forgot = async (req, res) => {
     const mailOptions = {
       from: process.env.USER,
       to: email,
-      subject: "CostSnap Reset Password Link",
-      text: `http://localhost:8000/forgot/${foundUser._id}/${token}`,
+      subject: 'Reset Password Link',
+      text: `http://localhost:5173/reset_password/${foundUser._id}/${token}`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Error in sending Email:", error);
-        return res
-          .status(500)
-          .json({ success: false, message: "Error in sending email." });
+        console.error('Error in sending Email:', error);
+        return res.status(500).json({ success: false, message: 'Error in sending email.' });
       } else {
-        console.log("Email sent.", info.response);
-        return res
-          .status(200)
-          .json({ success: true, message: "Email sent successfully." });
+        console.log('Email sent.', info.response);
+        return res.status(200).json({ success: true, message: 'Email sent successfully.' });
       }
     });
   } catch (error) {
-    console.error("Error:", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error." });
+    console.error('Error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
