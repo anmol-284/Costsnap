@@ -1,3 +1,7 @@
+import React from 'react';
+import TransactionList from '../data/TransactionList';
+import PieChart from './PieChart';
+
 import React, { useState } from 'react';
 
 const Transactions = () => {
@@ -65,41 +69,23 @@ const Transactions = () => {
         <h2 className="text-3xl mt-10">Transactions</h2>
       </div>
 
-      {/* Section 2 => Transactions Grid */}
-      <div className="relative">
-        {/* Transactions heading */}
-        <div className="grid grid-cols-5 gap-2 mb-4 text-neutral-200 font-semibold">
-          <span><h2>Date</h2></span>
-          <span><h2>Description</h2></span>
-          <span><h2>Category</h2></span>
-          <span><h2>Amount</h2></span>
-          <span><h2>Transaction Type</h2></span>
-        </div>
+          <PieChart/>
+          
+          <div>
+           {/* Transactions heading */}
+           <div className='text-neutral-200 text-lg font-semibold grid grid-cols-4  m-2 pl-16 pr-20 grid-flow-row-dense  '>
+            <span><h2>Date</h2></span>
+              <span><h2>Description</h2></span>
+             <span><h2>Category</h2></span>
+             <span><h2>Amount</h2></span>
+             <span><h2>Category</h2></span>
+             
+           </div>
+           
+           <TransactionList/>
 
-        {/* Render frontend transactions list */}
-        {Array.isArray(transactions) &&
-          transactions.map((transaction, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-5 p-2 shadow-md bg-white mb-2 rounded-md"
-            >
-              <p className="text-gray-800">{transaction.date}</p>
-              <p className="text-gray-800">{transaction.description}</p>
-              <p className="text-gray-800">{transaction.category}</p>
-              <p className="text-green-600">${transaction.amount}</p>
-              <p className="text-gray-800">{transaction.transactiontype}</p>
-            </div>
-          ))}
+          </div>
 
-        {/* Add Transaction Button */}
-        <div className="fixed right-10 top-14">
-          <button
-            className="bg-blue-500 text-white px-3 py-1 rounded-full shadow-md hover:bg-blue-600"
-            onClick={handleAddTransactionClick}
-          >
-            Add Transaction
-          </button>
-        </div>
       </div>
 
       {/* Add Transaction Form */}
