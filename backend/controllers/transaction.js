@@ -6,18 +6,12 @@ exports.makeTransaction = async (req, res) => {
     try {
         const { transactionname, transactiontype, amount, category } = req.body;
         const username = req.body.username;
-
-        const date = new Date();
-        let day = date.getDate();
-        let month = date.getMonth();
-        let year = date.getFullYear();
-        let createdAt = `${day}-${month}-${year}`;
-
-        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category, createdAt });
+        
+        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category});
 
         const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
 
-        if (dashboardid) {
+        if(dashboardid) {
 
             if (transactiontype === "Spend") {
                 dashboardid.expense += amount;
@@ -25,12 +19,11 @@ exports.makeTransaction = async (req, res) => {
             } else if (transactiontype === "Income") {
                 dashboardid.income += amount;
                 dashboardid.balance += amount;
-            } else {
-                console.log("Transaction type INvalid");
+            }else {
+                console.log("Transaction type InValid");
             }
-
             await dashboardid.save();
-
+            
         }
 
         // send a json response and success flag

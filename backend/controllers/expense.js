@@ -1,7 +1,40 @@
 const Transaction = require( '../models/transactionmodel');
+const mongoose = require("mongoose");
 const user = require("../controllers/user");
+// const create = async (req, res) => {
+//   try {
+//     req.body.recorded_by = req.auth._id
+//     const expense = new Expense(req.body)
+//     await expense.save()
+//     return res.status(200).json({
+//       message: "Expense recorded!"
+//     })
+//   } catch (err) {
+//     return res.status(400).json({
+//       error: errorHandler.getErrorMessage(err)
+//     }) 
+//   }
+// }
 	
+// const expenseByID = async (req, res, next, id) => {
+//     try {
+//       let expense = await Expense.findById(id).populate().exec()
+//       if (!expense)
+//         return res.status('400').json({
+//           error: "Expense record not found"
+//         })
+//       req.expense = expense
+//       next()
+//     } catch (err) {
+//       return res.status(400).json({
+//         error: errorHandler.getErrorMessage(err)
+//       })
+//     }
+// }
 
+// const read = (req, res) => {
+//     return res.json(req.expense)
+// }
 
 // const listByUser = async (req, res) => {
 //   let firstDay = req.query.firstDay

@@ -12,7 +12,7 @@ const Investments = () => {
     fetch('http://localhost:8000/api/v1/getinvestment',{
       method:'GET',
       headers: {
-        'Authorisation': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => response.json())

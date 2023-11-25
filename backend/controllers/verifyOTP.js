@@ -8,9 +8,9 @@ const userOtpVerification = require("../models/userOtpVerification");
 exports.verifyOTP = async(req, res) => {
     try {
         
-        let {userid, otp} = req.body;
+        let {userid, otpFromBackend} = req.body;
 
-        if (!userid || !otp) {
+        if (!userid || !otpFromBackend) {
             throw Error("Empty Otp details are not allowed");
         }
         else {
@@ -25,7 +25,7 @@ exports.verifyOTP = async(req, res) => {
             else {
                 // user otp record exists
                 const { expiresAt } = userOtpVerificationRecords[0];
-                const hashedOtp = userOtpVerificationRecords[0].otp;
+                const hashedOtp = userOtpVerificationRecords[0].otpFromBackend;
 
                 if (expiresAt < Date.now()) {
                     // user otp has been expired
@@ -34,7 +34,7 @@ exports.verifyOTP = async(req, res) => {
                 }
 
                 else {
-                    const validOTP = await bcrypt.compare(otp, hashedOtp);
+                    const validOTP = await bcrypt.compare(otpFromBackend, hashedOtp);
 
                     if (!validOTP) {
                         // wrong otp entered

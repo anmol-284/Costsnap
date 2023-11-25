@@ -20,6 +20,7 @@ import ForgetPassword from './login/ForgetPassword';
 import ConfirmPassword from './login/ConfirmPassword';
 import GroupView from './SplitPages/GroupView';
 import DonutChart from './data/piechart';
+import EmailVerificationPage from './signup/Otpverify';
 import Dashboard from './login/Dashboard';
 
 function App() {
@@ -112,13 +113,18 @@ function App() {
              path ="group-view"
              element={<GroupView/>}
           />
-          <Route 
-            path = "piechart"
-            element={<DonutChart/>}
-          />
+          
           <Route 
             path = "dashboard"
             element={<Dashboard/>}
+          />
+          <Route
+             path ="piechart"
+             element={<DonutChart/>}
+          />
+          <Route
+             path ="otpverify"
+             element={<EmailVerificationPage/>}
           />
         </Routes>
     </div>

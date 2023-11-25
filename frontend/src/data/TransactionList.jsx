@@ -21,11 +21,12 @@ const TransactionList = () => {
   
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    
     // Fetch transactions from the backend API
-    fetch('http://localhost:8000/api/v1/getalltransactions',{
-      method:'GET',
+    fetch('http://localhost:8000/api/v1/getalltransactions', {
+      method: 'GET',
       headers: {
-        'Authorisation': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
