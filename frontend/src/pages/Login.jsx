@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,31 +8,38 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      axios.post('http://localhost:8000/api/v1/userlogin', {
-        email, password
-      })
-        .then(response => {
-          
-          const data = response.data;
-          console.log('Login successful:', data);
+      const response = await fetch('http://localhost:8000/api/v1/userlogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-          // Set the token in a cookie
-          document.cookie = `token=${data.token}`;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-          // Redirect to the transactions page
-          window.location.href = 'transactions';
-        })
-        .catch(error => {
-          console.error('Login failed:', error.message);
-        });
-    } catch (err) {
-      setError('Invalid credentials'); // Handle error
+      const data = await response.json();
+      console.log('Login successful:', data);
+
+      // Set the token in a cookie
+      document.cookie = `token=${data.token}`;
+
+      // Redirect to the transactions page
+      window.location.href = 'transactions';
+    } catch (error) {
+      console.error('Login failed:', error.message);
+      setError('Invalid credentials');
     }
   };
 
   return (
-    <div className="flex h-screen bg-gray-200">
-      <div className="m-auto p-10 bg-white shadow-md rounded">
+    <div>
+      <div className="mt-[170px] ml-[400px] p-10 bg-white shadow-md rounded w-[450px] h-[360px] m-[100px]">
         <h2 className="text-2xl font-semibold mb-4">Login</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="mb-4">
@@ -62,10 +68,8 @@ const Login = () => {
         >
           Login
         </button>
-
-        {/* "Forgot Password" Link/Button */}
-        <Link to="/forgot" className="block text-center text-blue-500 mt-2">
-          Forgot Password?
+        <Link to="/forgetpassword">
+          <p className='text-center mt-3 text-zinc-600'>Forget Password?</p>
         </Link>
       </div>
     </div>

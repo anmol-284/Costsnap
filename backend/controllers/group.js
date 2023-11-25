@@ -4,21 +4,69 @@ const user = require("../models/usermodel");
 
 let validUsers = [];
 
+exports.groups = async(req, res) => {
+    try{
+        const username = req.body.username;
+        const userid = await user.findOne({username:username});
+        if(userid){
+            return res.status(200).json({
+                success:true,
+                data:userid.groups,
+                message:"All groups fetched successfully."
+            })
+        }
+
+    }catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Error while Creating Group.",
+        })
+    }
+}
+
+exports.groupmembers = async(req, res) => {
+    try{
+        const groupName = req.params.id;
+        const group = await Group.findOne({groupName:groupName});
+        if(group){
+            return res.status(200).json({
+                success:true,
+                data:group.grpMembers,
+                message:"All groups fetched successfully."
+            })
+        }
+
+    }catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Error while Creating Group.",
+        })
+    }
+}
+
 exports.createGroup = async (req, res) => {
     try {
         let groupName = req.body.groupName;
 
         let grpMembers = req.body.grpMembers;
+        const username = req.body.username;
 
-        // for (const grpMember of grpMembers) {
-        //     const userid = await user.findOne({username:grpMember});
+        grpMembers.push(username);
 
-        //     if (userid) {
-        //         validUsers.push(grpMember);
-        //     }
-        // }
+        for (const grpMember of grpMembers) {
+            const userid = await user.findOne({username:grpMember});
 
-        validUsers = grpMembers;
+            if (userid) {
+                validUsers.push(grpMember);
+            }
+        }
+
+        // validUsers = grpMembers;
+        for(let i = 0; i < validUsers.length; i++){
+            const userid = await user.findOne({username:validUsers[i]}).populate().exec();
+            userid.groups.push(groupName);
+            await userid.save();
+        }
 
         // grpMembers = validUsers;
         let splits = [];
@@ -112,7 +160,8 @@ exports.addusers = async (req, res) => {
 
 exports.addbill = async (req, res) => {
     try {
-        const { groupName, billname, totalExpenditure, category, paidby, share } = req.body;
+        const { billname, totalExpenditure, category, paidby, share } = req.body;
+        const groupName = req.params.id;
 
         const bill = await groupBill.create({ groupName, billname, totalExpenditure, category, paidby, share });
 

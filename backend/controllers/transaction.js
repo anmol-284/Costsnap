@@ -2,28 +2,35 @@ const transaction = require('../models/transactionmodel');
 const user = require('../models/usermodel');
 const dashboard = require('../models/dashboardmodel');
 
-exports.makeTransaction = async(req, res) => {
-    try{
-        const {transactionname, transactiontype, amount, category} = req.body;
+exports.makeTransaction = async (req, res) => {
+    try {
+        const { transactionname, transactiontype, amount, category } = req.body;
         const username = req.body.username;
-        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category});
 
-        const dashboardid =  await dashboard.findOne({ username:username }).populate().exec();
+        const date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth();
+        let year = date.getFullYear();
+        let createdAt = `${day}-${month}-${year}`;
 
-        if(dashboardid){
+        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category, createdAt });
 
-            if(transactiontype === "Spend"){
+        const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
+
+        if (dashboardid) {
+
+            if (transactiontype === "Spend") {
                 dashboardid.expense += amount;
                 dashboardid.balance -= amount;
-            }else if(transactiontype === "Income"){
+            } else if (transactiontype === "Income") {
                 dashboardid.income += amount;
                 dashboardid.balance += amount;
-            }else {
+            } else {
                 console.log("Transaction type INvalid");
             }
 
             await dashboardid.save();
-            
+
         }
 
         // send a json response and success flag
@@ -35,7 +42,7 @@ exports.makeTransaction = async(req, res) => {
             }
         );
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         console.log(err);
         res.status(500).json(
@@ -49,11 +56,11 @@ exports.makeTransaction = async(req, res) => {
 }
 
 
-exports.getallTransaction = async(req, res) => {
-    try{
+exports.getallTransaction = async (req, res) => {
+    try {
         const username = req.body.username;
 
-        const alltransactions =  await transaction.find({ username:username }).sort({createdAt:-1}).populate().exec();
+        const alltransactions = await transaction.find({ username: username }).sort({ createdAt: -1 }).populate().exec();
 
         // send a json response and success flag
         res.status(200).json(
@@ -64,7 +71,7 @@ exports.getallTransaction = async(req, res) => {
             }
         );
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         console.log(err);
         res.status(500).json(
@@ -78,23 +85,23 @@ exports.getallTransaction = async(req, res) => {
 }
 
 exports.recentTransactions = async (req, res) => {
-    try{
+    try {
         const username = req.body.username;
-        const finduser = await investment.find({username:username}).sort({createdAt:-1}).limit(10).populate().exec();
-        
-        if(finduser){
+        const finduser = await investment.find({ username: username }).sort({ createdAt: -1 }).limit(10).populate().exec();
+
+        if (finduser) {
             return res.status(200).json({
-                success:true,
-                message:"Recent transactions fetched successfully."
+                success: true,
+                message: "Recent transactions fetched successfully."
             })
-        }else{
+        } else {
             return res.status(401).json({
-                success:false,
-                message:"Recent transactions cannot be fetched."
+                success: false,
+                message: "Recent transactions cannot be fetched."
             })
         }
 
-    } catch(err){
+    } catch (err) {
         console.error(err);
         console.log(err);
         res.status(500).json(
@@ -108,29 +115,29 @@ exports.recentTransactions = async (req, res) => {
 }
 
 exports.updateTransaction = async (req, res) => {            // expenses to be updated
-    try{
+    try {
 
-        const {id} = req.params;
-        const {transactionname, transactiontype, category, amount} = req.body;
+        const { id } = req.params;
+        const { transactionname, transactiontype, category, amount } = req.body;
 
-        const updatetransaction = await transaction.findByIdAndUpdate(id,{transactionname, transactiontype, category, amount}, {new: true});
+        const updatetransaction = await transaction.findByIdAndUpdate(id, { transactionname, transactiontype, category, amount }, { new: true });
 
-        if(!updatetransaction){
+        if (!updatetransaction) {
             return res.status(401).json({
-                success:false,
-                message:"Transaction not found."
+                success: false,
+                message: "Transaction not found."
             })
         }
 
         return res.status(200).json({
-            success:true,
-            data:updatetransaction,
-            message:"Transaction updated successfully."
+            success: true,
+            data: updatetransaction,
+            message: "Transaction updated successfully."
         })
 
 
 
-    }catch(err){
+    } catch (err) {
         console.error(err);
         console.log(err);
         res.status(500).json(
@@ -145,40 +152,40 @@ exports.updateTransaction = async (req, res) => {            // expenses to be u
 
 
 exports.deleteTransaction = async (req, res) => {
-    try{
+    try {
 
-        const {id} = req.params;
+        const { id } = req.params;
 
         const deletetransaction = await transaction.findByIdAndDelete(id);
 
-        const dashboardid =  await dashboard.findOne({ username:username }).populate().exec();
+        const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
 
-        if(deletetransaction.transactiontype === "Spend"){
+        if (deletetransaction.transactiontype === "Spend") {
             dashboardid.expense -= amount;
             dashboardid.balance += amount;
-        }else if(deletetransaction.transactiontype === "Income"){
+        } else if (deletetransaction.transactiontype === "Income") {
             dashboardid.income -= amount;
             dashboardid.balance -= amount;
-        }else {
+        } else {
             console.log("Transaction type INvalid");
         }
 
         await dashboardid.save();
 
-        if(!deletetransaction){
+        if (!deletetransaction) {
             return res.status(401).json({
-                success:false,
-                message:"Transaction not found."
+                success: false,
+                message: "Transaction not found."
             })
         }
 
         return res.status(200).json({
-            success:true,
-            data:deletetransaction,
-            message:"Transaction deleted successfully."
+            success: true,
+            data: deletetransaction,
+            message: "Transaction deleted successfully."
         })
 
-    }catch(err){
+    } catch (err) {
         console.error(err);
         console.log(err);
         res.status(500).json(

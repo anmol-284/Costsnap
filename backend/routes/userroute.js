@@ -6,10 +6,10 @@ const user = require("../models/usermodel");
 
 // import controller
 const {makeTransaction, getallTransaction, recentTransactions, updateTransaction, deleteTransaction} = require('../controllers/transaction');
-const {stocktransaction, stocktransactionhistory} = require('../controllers/stock');
+const {stocktransaction, stocktransactionhistory, deletestocktransaction} = require('../controllers/stock');
 const {investment, getinvestment} = require('../controllers/investment');
 const {usersignup, verify, userlogin, resendOTP, logout} = require('../controllers/user');
-const {createGroup, addbill, addusers} = require("../controllers/group");
+const {createGroup, addbill, addusers, groups, groupmembers} = require("../controllers/group");
 const {splitBill} = require("../controllers/split");
 const {groupBills} = require("../controllers/groupbills");
 const {verifyOTP} = require("../controllers/verifyOTP");
@@ -18,43 +18,20 @@ const {forgot} = require("../controllers/forgot");
 const {auth} = require('../middlewares/Auth');
 const { expenseByCategory } = require('../controllers/expense');
 
-//define api route
-
-// // register user 
-// router.post("/usersignup", async(req,res) => {
-
-//     console.log('Received a request to /v1/usersignup');
-//     console.log('Request Body:', req.body);
-
-//     try {
-//         const {signUpData} = req.body
-//         if (!signUpData) {
-//             return res.status(400).json({ error: 'Invalid data provided' });
-//         }
-//         const newUser = new user(signUpData);
-//         await newUser.save();
-//         res.status(201).json({ message: 'User created successfully' });
-//     }
-
-//     catch (error) {
-//         console.error('Error in user signup:', error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
 
 router.post("/usersignup", usersignup);
 router.post("/verifyOTP", verifyOTP); 
 router.post("/resendOTP", resendOTP);
 router.post("/userlogin", userlogin);
-router.post("/logout", logout);
+router.post("/logout",auth, logout);
 router.post("/maketransaction", auth, makeTransaction);
 router.post("/investment", auth, investment);
-router.post("/stock", stocktransaction);
-router.post("/CreateGroup", createGroup);
-router.post("/splitbills", splitBill);
-router.post("/groupbills", groupBills);
-router.post("/addbill", addbill);
-router.post("/addusers", addusers);
+router.post("/stock", auth, stocktransaction);
+router.post("/creategroup",auth, createGroup);
+router.post("/splitbills",auth, splitBill);
+router.post("/groups/:id/add-bill",auth, groupBills);
+router.post("/addbill",auth, addbill);
+router.post("/addusers",auth, addusers);
 router.post("/forgot", forgot);
 
 
@@ -64,9 +41,13 @@ router.get("/recenttransactions", auth, recentTransactions);
 router.get("/getinvestment",auth, getinvestment);
 router.get("/stocktransactionhistory", stocktransactionhistory);
 router.get("/expensebycategory", auth, expenseByCategory);
+router.get("/getgroups", auth, groups);
+router.get("/groups/:id/members", auth, groupmembers);
 
-router.put("/updatetransactions/:id", updateTransaction);
 
-router.delete("/deletetransaction/:id",deleteTransaction);
+router.put("/updatetransactions/:id",auth, updateTransaction);
+
+router.delete("/deletetransaction/:id", auth, deleteTransaction);
+router.delete("/deletestocktransaction/:id", auth, deletestocktransaction);
 
 module.exports = router;

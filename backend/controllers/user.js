@@ -31,10 +31,16 @@ exports.usersignup = async(req, res) => {
         }
         
         // finding that user is already registered or not 
-        const existingEmail = await user.findOne({email:email});
         const existingUsername = await user.findOne({username:username});
+        const existingEmail = await user.findOne({email:email});
         
-        if (existingUsername || existingEmail) {
+        if (existingUsername) {
+            return res.status(400).json({
+                success:false,
+                message:"Username not available"
+            })
+        }
+        if (existingEmail) {
             return res.status(400).json({
                 success:false,
                 message:"User Already Exist."

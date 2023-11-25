@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import CTAButton from '../components/core/Button';
 
 const Investments = () => {
 
@@ -8,21 +8,25 @@ const Investments = () => {
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     // Fetch transactions from the backend API
-    axios.get('http://localhost:8000/api/v1/getinvestment', {
+    
+    fetch('http://localhost:8000/api/v1/getinvestment',{
+      method:'GET',
       headers: {
         'Authorisation': `Bearer ${token}`,
       },
     })
-      .then((response) => {
-        setInvestments(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => console.error('Error fetching investments:', error));
-      console.log("Fetched successfully");
+      .then((response) => response.json())
+      .then((response) => setInvestments(response.data))
+      .catch((error) => console.error('Error fetching transactions:', error));
   }, []);
+
+  if (!Array.isArray(investments.holdings)) {
+    return <div className='text-green-600 text-2xl m-auto'>No transaction found</div>;
+  }
 
 
   return (
+    
     <div className='text-white w-auto ml-60'>
 
       {/* section => heading */}
@@ -32,8 +36,8 @@ const Investments = () => {
 
       {/* section => Buttons   */}
       <div className='flex flex-row  mt-6'>
-        <button active={true} linkto={"/addtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12'>Add Transaction</button>
-        <button active={false} linkto={"/viewtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12'>View Transaction</button>
+        <CTAButton linkto={"/addtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12 p-2'>Add Transaction</CTAButton>
+        <CTAButton linkto={"/viewtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12'>View Transaction</CTAButton>
       </div>
 
       <div className='w-auto'>
@@ -114,6 +118,8 @@ const Investments = () => {
 
 
       </div>
+
+      <div className='mb-20'></div>
 
     </div>
 
