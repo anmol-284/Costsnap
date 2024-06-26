@@ -17,7 +17,6 @@ const {forgot} = require("../controllers/forgot");
 const {currentMonthPreview, expenseByCategory, averageCategories} =  require("../controllers/expense");
  
 const {auth} = require('../middlewares/Auth');
-const { expenseByCategory } = require('../controllers/expense');
 
 
 router.post("/usersignup", usersignup);

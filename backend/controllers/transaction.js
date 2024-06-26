@@ -13,7 +13,7 @@ exports.makeTransaction = async (req, res) => {
 
         if(dashboardid) {
 
-            if (transactiontype === "Spend") {
+            if (transactiontype === "Expense") {
                 dashboardid.expense += amount;
                 dashboardid.balance -= amount;
             } else if (transactiontype === "Income") {
@@ -25,6 +25,8 @@ exports.makeTransaction = async (req, res) => {
             await dashboardid.save();
             
         }
+
+        console.log("transaction added");
 
         // send a json response and success flag
         res.status(200).json(

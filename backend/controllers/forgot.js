@@ -6,6 +6,8 @@ require("dotenv").config();
 exports.forgot = async (req, res) => {
   const { email } = req.body;
 
+  console.log(email);
+
   try {
     const foundUser = await user.findOne({ email });
 
