@@ -14,8 +14,7 @@ const Transactions = () => {
     transactiontype: '', // New entry for transaction type
   });
   const [transactions, setTransactions] = useState([]);
-
-  const expense = false;
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     fetchtransactions();
@@ -25,7 +24,7 @@ const Transactions = () => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
 
-    fetch('http://localhost:8000/api/v1/getalltransactions', {
+    fetch(`${SERVER_URL}/getalltransactions`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -40,7 +39,7 @@ const Transactions = () => {
 
     const token = document.cookie.replace(/(?:(?:^|.;\s)token\s*=\s*([^;]).$)|^.*$/, '$1');
 
-    fetch(`http://localhost:8000/api/v1/deletetransaction/${transactionId}`, {
+    fetch(`${SERVER_URL}/deletetransaction/${transactionId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -80,7 +79,7 @@ const Transactions = () => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
       console.log(formData);
 
-      const response = await fetch('http://localhost:8000/api/v1/makeTransaction', {
+      const response = await fetch(`${SERVER_URL}/makeTransaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
