@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 const ViewTransaction = () => {
   const [transactions, setTransactions] = useState([]);
-
+  const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
+  
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-    fetch('http://localhost:8000/api/v1/stocktransactionhistory', {
+    fetch(`${SERVER_URL}/stocktransactionhistory`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -24,7 +25,7 @@ const ViewTransaction = () => {
     // Delete a transaction with the given ID
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-    fetch(`http://localhost:8000/api/v1/deletestocktransaction/${transactionId}`, {
+    fetch(`${SERVER_URL}/deletestocktransaction/${transactionId}`, {
       method: 'DELETE',
       headers: {
         'Authorisation': `Bearer ${token}`,

@@ -8,7 +8,7 @@ Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart = () => {
   const [chartdata, setChartdata] = useState({});
-
+  const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
     useEffect(() => {
         
         fetchData();
@@ -18,7 +18,7 @@ const PieChart = () => {
       try {
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-          const response = await fetch('http://localhost:8000/api/v1/expenseByCategory', {
+          const response = await fetch(`${SERVER_URL}/expenseByCategory`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -70,11 +70,11 @@ const PieChart = () => {
             <h2>Donut Chart</h2>
             <div>
                 {/* <Pie data={chartdata} /> */}
-                 {Array.isArray(chartdata) && chartdata.map((data) => (
+                 {/* {Array.isArray(chartdata) && chartdata.map((data) => (
                   <div>
                     <p>{data.mergedValues.total}</p>
                   </div>
-                 ))}
+                 ))} */}
             </div>
         </div>
     );

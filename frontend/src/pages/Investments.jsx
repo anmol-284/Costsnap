@@ -12,6 +12,7 @@ const Investments = () => {
     amount: '',
     createdAt: '',
   });
+  const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
    fetchInvestments();
@@ -21,7 +22,7 @@ const Investments = () => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     // Fetch transactions from the backend API
 
-    fetch('http://localhost:8000/api/v1/getinvestment', {
+    fetch(`${SERVER_URL}/getinvestment`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -61,7 +62,7 @@ const Investments = () => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
       console.log(formData);
 
-      const response = await fetch('http://localhost:8000/api/v1/stock', {
+      const response = await fetch(`${SERVER_URL}/stock`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -28,13 +28,14 @@ const SplitBills = () => {
   const handleCreateGroup = async () => {
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
-
+      
+      const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
       // Make a POST request to the backend
-      const response = await fetch('http://localhost:8000/api/v1/creategroup', {
+      const response = await fetch(`${SERVER_URL}/creategroup`, {
         method: 'POST',
         headers: {
-          'Authorisation':`Bearer ${token}`,
           'Content-Type': 'application/json',
+          Authorization:`Bearer ${token}`,
         },
         body: JSON.stringify({
           groupName,

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +16,8 @@ const Login = () => {
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/userlogin', {
+      console.log(SERVER_URL);
+      const response = await fetch(`${SERVER_URL}/userlogin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

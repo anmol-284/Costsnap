@@ -10,6 +10,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -18,7 +19,7 @@ const Signup = () => {
   const handleSignup = async () => {
     setIsLoggingIn(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/usersignup', {
+      const response = await fetch(`${SERVER_URL}/usersignup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
