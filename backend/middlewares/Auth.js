@@ -10,6 +10,7 @@ exports.auth = (req, res, next) => {
         let token = req.headers["authorization"].split("Bearer ")[1];
 
         if (!token) {
+            console.log(token);
             return res.status(401).json({
                 success: false,
                 message: "Your token is missing. Please Try Again."
