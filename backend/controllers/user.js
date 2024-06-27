@@ -1,5 +1,5 @@
-// import the model
 const user = require("../models/usermodel");
+const investmentid = require("../models/investmentmodel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Token = require("../models/token");
@@ -76,11 +76,14 @@ exports.usersignup = async(req, res) => {
         });
 
         await User.save()
+
         .then((result) => {
             // Sending a confirmation email to the user.
             sendConfirmationEmail(result,res);
         })
-
+        
+        const investid = await investmentid.create({username});
+        
         // send a json response and success flag
         res.status(201).json({
             success:true,

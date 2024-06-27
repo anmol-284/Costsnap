@@ -103,9 +103,11 @@ exports.stocktransaction = async (req, res) => {
 
 exports.stocktransactionhistory = async (req, res) => {
     try {
-        const user_name = req.body.username;
+        const username = req.body.username;
+        console.log(username);
+        const stocktransactionhistory = await stock.find({ username:username }).sort({ createdAt: -1 }).populate().exec();
 
-        const stocktransactionhistory = await stock.find({ user_name }).sort({ createdAt: -1 }).populate().exec();
+        // console.log(stocktransactionhistory);
 
         // send a json response and success flag
         res.status(200).json(

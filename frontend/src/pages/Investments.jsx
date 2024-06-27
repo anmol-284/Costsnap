@@ -32,9 +32,9 @@ const Investments = () => {
       .catch((error) => console.error('Error fetching transactions:', error));
   }
 
-  if (!Array.isArray(investments.holdings)) {
-    return <div className='text-green-600 text-2xl m-auto'>No transaction found</div>;
-  }
+  // if (!Array.isArray(investments.holdings)) {
+  //   return <div className='text-green-600 text-2xl m-auto'>No transaction found</div>;
+  // }
 
   const handleAddTransactionClick = () => {
     setIsFormVisible(true);
@@ -106,7 +106,7 @@ const Investments = () => {
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-2 rounded-xl p-6 bg-[#293038]">
-          {investments && investments.holdings && (
+          {investments && investments.totalinvestment && (
             <div>
               <p className="text-white text-base font-medium ">{investments.totalinvestment.toFixed(2)}</p>
               <p className="text-white text-2xl font-bold ">12,000</p>
@@ -130,7 +130,9 @@ const Investments = () => {
 
         </div>
 
-        {Array.isArray(investments.holdings) && investments.holdings.map((holding) => (
+        
+
+        {investments && Array.isArray(investments.holdings) && investments.holdings.map((holding) => (
           <div key={holding._id} className='grid grid-cols-6 border-t border-t-[#3c4753]'>
 
             <p className='px-4 py-4 text-white text-sm'>{holding.stockname}</p>
@@ -138,7 +140,7 @@ const Investments = () => {
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.units.toFixed(2)}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.amount.toFixed(2)}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>10000</p>
-            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{10000 - holding.amount.toFixed(2)}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{(10000 - holding.amount.toFixed(2)>=0)?(<div className='text-green-400'>+{10000 - holding.amount.toFixed(2)}</div>):(<div className='text-red-400'>-{10000 - holding.amount.toFixed(2)}</div>)}</p>
 
           </div>
         )

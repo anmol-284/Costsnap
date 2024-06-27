@@ -15,6 +15,8 @@ const Transactions = () => {
   });
   const [transactions, setTransactions] = useState([]);
 
+  const expense = false;
+
   useEffect(() => {
     fetchtransactions();
   }, []);
@@ -114,25 +116,25 @@ const Transactions = () => {
         </div>
         <div className="flex gap-3 p-3 overflow-x-hidden justify-between">
           <div className='flex gap-2'>
-          <div
-            className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-            <p className="text-white text-sm font-medium leading-normal">All</p>
+            <div
+              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
+              <p className="text-white text-sm font-medium leading-normal">All</p>
+            </div>
+            <div
+              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
+              <p className="text-white text-sm font-medium leading-normal">Income</p>
+            </div>
+            <div
+              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
+              <p className="text-white text-sm font-medium leading-normal">Expense</p>
+            </div>
           </div>
-          <div
-            className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-            <p className="text-white text-sm font-medium leading-normal">Income</p>
-          </div>
-          <div
-            className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-            <p className="text-white text-sm font-medium leading-normal">Expense</p>
-          </div>
-          </div>
-            <button
-              className="bg-[#293038] text-sm pl-4 pr-4 text-white rounded-xl shadow-md hover:bg-gray-600"
-              onClick={handleAddTransactionClick}
-            >
-              Add Transaction
-            </button>
+          <button
+            className="bg-[#293038] text-sm pl-4 pr-4 text-white rounded-xl shadow-md hover:bg-gray-600"
+            onClick={handleAddTransactionClick}
+          >
+            Add Transaction
+          </button>
 
         </div>
         <div className="px-4 py-3">
@@ -149,12 +151,12 @@ const Transactions = () => {
               </div>
               <input placeholder="Search all transactions"
                 className="form-input flex w-full min-w-0 flex-1 rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                 />
+              />
             </div>
           </label>
         </div>
 
-         {Array.isArray(transactions) && transactions.map((transaction) => (
+        {Array.isArray(transactions) && transactions.map((transaction) => (
           <div
             key={transaction._id}
             className="flex gap-4 mx-4 py-3 justify-between border-b border-[#3c4753]">
@@ -176,7 +178,7 @@ const Transactions = () => {
             <div class="shrink-0"><p class="text-white text-base font-normal leading-normal">
 
 
-              {transaction.amount}</p></div>
+              {(transaction.transactiontype == "Income") ? (<div className='text-green-400'>+{transaction.amount}</div>) : (<div className='text-red-400'>-{transaction.amount}</div>)}</p></div>
           </div>
         ))}
 
@@ -186,85 +188,90 @@ const Transactions = () => {
 
 
       {isFormVisible && (
-      <>
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
-        <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white bg-[#111418] p-8 shadow-md w-96 rounded-md backdrop-blur-sm">
-          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 gap-4">
-            <label className="font-semibold">Date:</label>
-            <input
-              type="date"
-              name="createdAt"
-              value={formData.createdAt}
-              onChange={handleInputChange}
-              className="border rounded p-2 bg-[#293038] focus:outline-none "
-            />
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+          <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white bg-[#111418] p-8 shadow-md w-96 rounded-md backdrop-blur-sm">
+            <form onSubmit={handleFormSubmit} className="grid grid-cols-1 gap-4">
+              <label className="font-semibold">Date:</label>
+              <input
+                type="date"
+                name="createdAt"
+                value={formData.createdAt}
+                onChange={handleInputChange}
+                className="border rounded p-2 bg-[#293038] focus:outline-none "
+              />
 
-            <label className="font-semibold">Description:</label>
-            <input
-              type="text"
-              name="transactionname"
-              value={formData.transactionname}
-              onChange={handleInputChange}
-              placeholder="Ex.Canteen, Movie"
-              className="form-input border rounded p-2 bg-[#293038] focus:outline-none "
-            />
+              <label className="font-semibold">Description:</label>
+              <input
+                type="text"
+                name="transactionname"
+                value={formData.transactionname}
+                onChange={handleInputChange}
+                placeholder="Ex.Canteen, Movie"
+                className="form-input border rounded p-2 bg-[#293038] focus:outline-none "
+              />
 
-            <label className="font-semibold">Category:</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="border rounded p-2 bg-[#293038] focus:outline-none "
-            >
-              <option value="" disabled>Select type</option>
-              <option value="Food">Food</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Travel">Travel</option>
-            </select>
-
-            <label className="font-semibold">Amount:</label>
-            <input
-              type="number"
-              name="amount"
-              value={formData.amount}
-              onChange={handleInputChange}
-              placeholder="Ex. 100"
-              className="form-input border rounded p-2 text-sm bg-[#293038] focus:outline-none "
-            />
-
-
-            <label className="font-semibold">Transaction Type:</label>
-            <select
-              name="transactiontype"
-              value={formData.transactiontype}
-              onChange={handleInputChange}
-              className="border rounded p-2 bg-[#293038] focus:outline-none "
-            >
-              <option value="" disabled>Select type</option>
-              <option value="Expense" className='hover:bg-gray-400'>Expense</option>
-              <option value="Income">Income</option>
-            </select>
-
-            <div className="flex justify-between mt-6">
-              <button
-                type="button"
-                onClick={() => setIsFormVisible(false)}
-                className="bg-[#293038] text-white px-4 py-2 rounded-xl shadow-md"
-                >
-                Close
-              </button>
-              <button
-                type="submit"
-                onClick={handleFormSubmit}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-xl shadow-md hover:bg-gray-400"
+              <label className="font-semibold">Transaction Type:</label>
+              <select
+                name="transactiontype"
+                value={formData.transactiontype}
+                onChange={handleInputChange}
+                className="border rounded p-2 bg-[#293038] focus:outline-none "
               >
-                Submit
-              </button>
+                <option value="" disabled>Select type</option>
+                <option value="Expense" className='hover:bg-gray-400'>Expense</option>
+                <option value="Income">Income</option>
+              </select>
 
-            </div>
-          </form>
-        </div>
+              {(formData.transactiontype === 'Expense') && (
+                <div className='flex flex-col gap-2'>
+                  <label className="font-semibold">Category:</label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="border rounded p-2 bg-[#293038] focus:outline-none "
+                  >
+                    <option value="" disabled>Select type</option>
+                    <option value="Food">Food</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Travel">Travel</option>
+                  </select>
+                </div>
+              )}
+
+              <label className="font-semibold">Amount:</label>
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleInputChange}
+                placeholder="Ex. 100"
+                className="form-input border rounded p-2 text-sm bg-[#293038] focus:outline-none "
+              />
+
+
+
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsFormVisible(false)}
+                  className="bg-[#293038] text-white px-4 py-2 rounded-xl shadow-md"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  onClick={handleFormSubmit}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-xl shadow-md hover:bg-gray-400"
+                >
+                  Submit
+                </button>
+
+              </div>
+            </form>
+          </div>
         </>
       )}
     </div>

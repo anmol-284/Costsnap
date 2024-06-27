@@ -51,7 +51,6 @@ const PieChart = () => {
                   ],
               };
 
-              
 
               setChartdata(newChartData);
               console.log("hhhhh",chartdata);
@@ -70,7 +69,7 @@ const PieChart = () => {
         <div className='ml-60'>
             <h2>Donut Chart</h2>
             <div>
-                <Pie data={chartdata} />
+                {/* <Pie data={chartdata} /> */}
                  {Array.isArray(chartdata) && chartdata.map((data) => (
                   <div>
                     <p>{data.mergedValues.total}</p>
