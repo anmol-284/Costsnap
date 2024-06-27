@@ -12,20 +12,20 @@ const Navbar = () => {
     <div    style={{ boxShadow: '0 6px 8px rgba(0, 0, 0, 0.1)'}}  className='fixed left-0 top-0 w-60' >
       {/* Nav Links */}
       <div
-        className='bg-gradient-to-r from-blue-400 to-purple-400 text-white w-60 h-44 flex items-center justify-center'
+        className=' text-white w-60 h-44 flex items-center justify-center'
         style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
       >
         <p className='text-4xl font-bold'>CostSnap</p>
       </div>
 
       {/* <div className='w-60 border bg-red-300' style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}> */}
-        <nav  className='w-60 border ' style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        <nav  className='w-60 ' style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
           <ul className='m-6 p-5 text-gray-400'>
             <li className='m-4 p-2'>
-              <Link to={"/dashboard"} className=" hover:text-blue-700">
+              <Link to={"/"} className=" hover:text-blue-700">
                 <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
                   <FaHome />
-                  <p className="text-xl">Dashboard</p>
+                  <p className="text-xl">Home</p>
                 </div>
               </Link>
             </li>

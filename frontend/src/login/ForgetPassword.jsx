@@ -10,7 +10,7 @@ const ForgetPassword = () => {
   
     const handleLogin = async () => {
       try {
-        const response = await axios.post('/api/login', { email });
+        const response = await axios.post('http://localhost:8000/api/v1/forgot', { email });
         console.log(response.data); // Handle success
       } catch (err) {
         setError('Invalid credentials'); // Handle error

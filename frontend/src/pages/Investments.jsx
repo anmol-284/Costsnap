@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import CTAButton from '../components/core/Button';
+import { Link } from 'react-router-dom';
 
 const Investments = () => {
 
   const [investments, setInvestments] = useState([]);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    transactiontype: '', // New entry for transaction type
+    stockname: '',
+    unitprice: '',
+    amount: '',
+    createdAt: '',
+  });
 
   useEffect(() => {
+   fetchInvestments();
+  }, []);
+
+  const fetchInvestments = async () => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
     // Fetch transactions from the backend API
-    
-    fetch('http://localhost:8000/api/v1/getinvestment',{
-      method:'GET',
+
+    fetch('http://localhost:8000/api/v1/getinvestment', {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -18,108 +30,202 @@ const Investments = () => {
       .then((response) => response.json())
       .then((response) => setInvestments(response.data))
       .catch((error) => console.error('Error fetching transactions:', error));
-  }, []);
+  }
 
   if (!Array.isArray(investments.holdings)) {
     return <div className='text-green-600 text-2xl m-auto'>No transaction found</div>;
   }
 
+  const handleAddTransactionClick = () => {
+    setIsFormVisible(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    setIsFormVisible(false);
+
+    try {
+      // const newInvestments = { ...formData };
+      // setInvestments([...investments, newInvestments]);
+
+
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      console.log(formData);
+
+      const response = await fetch('http://localhost:8000/api/v1/stock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      console.log('Backend response:', result);
+
+      fetchInvestments();
+
+      setIsFormVisible(false);
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+    } finally {
+      setIsFormVisible(false);
+    }
+  };
+
 
   return (
-    
-    <div className='text-white w-auto ml-60'>
 
-      {/* section => heading */}
-      <div className='text-stone-300 w-[100vw]   border-b-[1px] border-b-blue-500 '>
-        <h2 className='text-5xl mb-2 mt-10 ml-12 '> Investments</h2>
-      </div>
-
-      {/* section => Buttons   */}
-      <div className='flex flex-row  mt-6'>
-        <CTAButton linkto={"/addtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12 p-2'>Add Transaction</CTAButton>
-        <CTAButton linkto={"/viewtransaction"} className='w-40 h-10 bg-gray-400 rounded-md ml-12'>View Transaction</CTAButton>
-      </div>
-
-      <div className='w-auto'>
-        <h2 className='text-4xl m-12'>Portfolio Performance</h2>
-      </div>
+    <div className='text-white w-auto ml-60 my-16'>
 
 
-
-      <div className=''>
-
-        {/* Transactions heading */}
-        <div className='grid grid-cols-4 '>
-
-          <div className='ml-12 p-4 text-lg '>Total Paid in </div>
-          <div className='ml-12 p-4 text-lg'>Current Portfolio Value</div>
-          <div className='ml-12 p-4 text-lg'>Change in Value</div>
-          <div className='ml-12 p-4 text-lg'>Return in value(absolute)</div>
-
+      <div className='flex flex-col pl-24 pr-48 pb-10'>
+        <div className="flex flex-wrap justify-between gap-3">
+          <p className="text-white text-[32px] font-bold min-w-72">Portfolio</p>
         </div>
-
-        {investments && investments.holdings && (
-          <div key={investments._id} className='grid grid-cols-4 text-neutral-200'>
-
-
-            <p className='ml-12 p-4 text-2xl'>{investments.totalinvestment.toFixed(2)}</p>
-
-
-            <p className='ml-12 p-4 text-2xl'>45000</p>
-
-
-            <p className='ml-12 p-4 text-2xl'>45000-{investments.totalinvestment.toFixed(2)}</p>
-
-
-            <p className='ml-12 p-4 text-2xl'>12%</p>
+        <div className="flex justify-between pt-4 pb-4">
+          <h3 className="text-white text-lg font-bold">Total balance</h3>
+          <div className='flex justify-around gap-3'>
+            <button onClick={handleAddTransactionClick} className='bg-[#293038] text-sm pl-4 pr-4 py-2 text-white rounded-xl shadow-md hover:bg-gray-600'>Add Transaction</button>
+            
+            <Link to={"/viewtransaction"}>
+              <button className='bg-[#293038] text-sm pl-4 pr-4 py-2 text-white rounded-xl shadow-md hover:bg-gray-600'>View Transaction</button>
+            </Link>
 
           </div>
-
-        )}
-
+        </div>
+        <div className="flex flex-1 flex-col gap-2 rounded-xl p-6 bg-[#293038]">
+          {investments && investments.holdings && (
+            <div>
+              <p className="text-white text-base font-medium ">{investments.totalinvestment.toFixed(2)}</p>
+              <p className="text-white text-2xl font-bold ">12,000</p>
+            </div>
+          )}
+        </div>
       </div>
 
 
-      <div className='w-auto'>
-        <h2 className='text-4xl m-12'>Your Holdings</h2>
-      </div>
 
-      <div className='flex flex-col '>
+      <div className='flex flex-col overflow-hidden rounded-xl border border-[#3c4753] ml-24 mr-48'>
 
-        <div className='grid grid-cols-9 auto-cols-fr'>
+        <div className='grid grid-cols-6 auto-cols-fr bg-[#1c2126]'>
 
-          <div className='ml-12 p-2 text-lg'>Symbol</div>
-          <div className='ml-12 p-2 text-lg'>Name</div>
-          <div className='ml-12 p-2 text-lg'>Weight</div>
-          <div className='ml-12 p-2 text-lg'>Units</div>
-          <div className='ml-12 p-2 text-lg'>Unit Price</div>
-          <div className='ml-12 p-2 text-lg'>Value</div>
-          <div className='ml-12 p-2 text-lg'>Current</div>
-          <div className='ml-12 p-2 text-lg'>Rate of Return(Absolute)</div>
+          <div className='text-md font-medium px-4 py-3'>Stock</div>
+          <div className='text-md font-medium px-4 py-3'>Price</div>
+          <div className='text-md font-medium px-4 py-3'>Quantity</div>
+          <div className='text-md font-medium px-4 py-3'>Value</div>
+          <div className='text-md font-medium px-4 py-3'>Current</div>
+          <div className='text-md font-medium px-4 py-3'>P/L</div>
 
         </div>
 
         {Array.isArray(investments.holdings) && investments.holdings.map((holding) => (
-          <div key={holding._id} className='grid grid-cols-9'>
+          <div key={holding._id} className='grid grid-cols-6 border-t border-t-[#3c4753]'>
 
-
-            <p className='ml-12 p-2'>Tata steel</p>
-            <p className='ml-12 p-2 '>{holding.stockname}</p>
-            <p className='ml-12 p-2'>30</p>
-            <p className='ml-12 p-2 '>{holding.units.toFixed(2)}</p>
-            <p className='ml-12 p-2 '>{holding.averageprice.toFixed(2)}</p>
-            <p className='ml-12 p-2 '>{holding.amount.toFixed(2)}</p>
-            <p className='ml-12 p-2'>10000</p>
-            <p className='ml-12 p-2'>1000</p>
+            <p className='px-4 py-4 text-white text-sm'>{holding.stockname}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.averageprice.toFixed(2)}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.units.toFixed(2)}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.amount.toFixed(2)}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>10000</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{10000 - holding.amount.toFixed(2)}</p>
 
           </div>
         )
         )}
-
-
       </div>
 
-      <div className='mb-20'></div>
+
+
+
+      {isFormVisible && (
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+          <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white bg-[#111418] p-8 shadow-md w-96 rounded-md backdrop-blur-sm">
+            <form onSubmit={handleFormSubmit} className="grid grid-cols-1 gap-4">
+              <label className="font-semibold">Date:</label>
+              <input
+                type="date"
+                name="createdAt"
+                value={formData.createdAt}
+                onChange={handleInputChange}
+                className="border rounded p-2 bg-[#293038] focus:outline-none "
+              />
+
+              <label className="font-semibold">Stock Name:</label>
+              <input
+                type="text"
+                name="stockname"
+                value={formData.stockname}
+                onChange={handleInputChange}
+                placeholder="Ex.Tata, Adani"
+                className="form-input border rounded p-2 bg-[#293038] focus:outline-none "
+              />
+
+
+              <label className="font-semibold">Unit Price:</label>
+              <input
+                type="number"
+                name="unitprice"
+                value={formData.unitprice}
+                onChange={handleInputChange}
+                placeholder="Ex. 100"
+                className="form-input border rounded p-2 text-sm bg-[#293038] focus:outline-none "
+              />
+
+              <label className="font-semibold">Amount:</label>
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleInputChange}
+                placeholder="Ex. 100"
+                className="form-input border rounded p-2 text-sm bg-[#293038] focus:outline-none "
+              />
+
+              <label className="font-semibold">Transaction Type:</label>
+              <select
+                name="transactiontype"
+                value={formData.transactiontype}
+                onChange={handleInputChange}
+                className="border rounded p-2 bg-[#293038] focus:outline-none "
+              >
+                <option value="" disabled>Select type</option>
+                <option value="buy" className='hover:bg-gray-400'>Buy</option>
+                <option value="sell">Sell</option>
+              </select>
+
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsFormVisible(false)}
+                  className="bg-[#293038] text-white px-4 py-2 rounded-xl shadow-md"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  onClick={handleFormSubmit}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-xl shadow-md hover:bg-gray-400"
+                >
+                  Submit
+                </button>
+
+              </div>
+            </form>
+          </div>
+        </>
+      )}
 
     </div>
 

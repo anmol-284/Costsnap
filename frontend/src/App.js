@@ -21,7 +21,7 @@ import ConfirmPassword from './login/ConfirmPassword';
 import GroupView from './SplitPages/GroupView';
 import DonutChart from './data/piechart';
 import EmailVerificationPage from './signup/Otpverify';
-import Dashboard from './login/Dashboard';
+
 
 function App() {
   return (
@@ -30,10 +30,7 @@ function App() {
        <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Home/>} />
-          <Route
-             path ="dashboard"
-             element={<Dashboard/>}
-          />
+        
           <Route
              path ="transactions"
              element={<Transactions/>}
@@ -114,10 +111,6 @@ function App() {
              element={<GroupView/>}
           />
           
-          <Route 
-            path = "dashboard"
-            element={<Dashboard/>}
-          />
           <Route
              path ="piechart"
              element={<DonutChart/>}

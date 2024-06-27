@@ -6,7 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customColor: 'rgb(0, 8, 20)',
+        customColor: 'rgb(17, 20, 24)',
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
       },
     },
   },

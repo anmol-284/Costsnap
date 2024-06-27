@@ -49,35 +49,41 @@ const ViewTransaction = () => {
   }
 
   return (
-    <div className='text-white ml-60'>
-      <div className='text-stone-300 w-[100vw] border-b-[1px] border-b-blue-500 '>
-        <h2 className='text-3xl mb-2 mt-10 ml-24 '> Transaction History</h2>
+    <div className='text-white ml-60 my-16'>
+      <div className="flex flex-wrap justify-between gap-3 pl-24 pr-48 pb-4">
+        <p className="text-white text-[32px] font-bold min-w-72">Transaction History</p>
       </div>
 
-      {/* Transactions heading */}
-      <div className='text-neutral-200 text-lg grid grid-cols-6 text-center m-10'>
-        <span><h2>Transaction Type</h2></span>
-        <span><h2>TimeStamp</h2></span>
-        <span><h2>Stock Name</h2></span>
-        <span><h2>Unit Price</h2></span>
-        <span><h2>Amount</h2></span>
-      </div>
+      <div  className='flex flex-col overflow-hidden rounded-xl border border-[#3c4753] ml-24 mr-48'>
+        <div className='grid grid-cols-6 auto-cols-fr bg-[#1c2126]'>
 
-      {transactions && transactions.map((transaction) => (
-        <div key={transaction._id} className='text-neutral-200 grid grid-cols-6 text-center m-10'>
-          <p>{transaction.transactiontype}</p>
-          <p>{transaction.createdAt}</p>
-          <p>{transaction.stockname}</p>
-          <p>{transaction.unitprice}</p>
-          <p>{transaction.amount}</p>
-          <button
-            className="text-red-500"
-            onClick={() => handleDelete(transaction._id)}
-          >
-            Delete
-          </button>
+          <div className='text-md font-medium px-4 py-3'>Date</div>
+          <div className='text-md font-medium px-4 py-3'>Type</div>
+          <div className='text-md font-medium px-4 py-3'>Stock</div>
+          <div className='text-md font-medium px-4 py-3'>Price</div>
+          <div className='text-md font-medium px-4 py-3'>Quantity</div>
+          <div className='text-md font-medium px-4 py-3'>Value</div>
+
         </div>
-      ))}
+
+        {transactions && transactions.map((transaction) => (
+          <div key={transaction._id} className='grid grid-cols-6 border-t border-t-[#3c4753]'>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{new Date(transaction.createdAt).toLocaleDateString()}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.transactiontype}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.stockname}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.unitprice}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.amount}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>1000</p>
+            {/* <button
+              className="text-red-500"
+              onClick={() => handleDelete(transaction._id)}
+            >
+              Delete
+            </button> */}
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }

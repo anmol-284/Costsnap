@@ -6,7 +6,7 @@ import CTAButton from "../components/core/Button"
 
 const Dashboard = () => {
   return (
-   <div className='ml-60  mr-60'>
+   <div className=''>
     <div className='text-stone-300 flex items-center justify-start'>
      <h1 className='text-3xl m-auto mt-10'> Dashboard</h1>
     </div>
@@ -14,7 +14,7 @@ const Dashboard = () => {
 
      <div className='flex flex-row m-4 p-6 items-center justify-center'>
      <CTAButton  linkto={"/balance"} className="flex items-center justify-between">
-      <p className='mt-16 text-4xl'>$3,596</p>
+      <p className='ml-[100px] mt-16 text-4xl'>$3,596</p>
      <p className='text-2xl mt-5'> Balance</p>
      </CTAButton>
 

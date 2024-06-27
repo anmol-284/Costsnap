@@ -12,7 +12,7 @@ const GroupView = ({ onSelectGroup }) => {
     fetch('http://localhost:8000/api/v1/getgroups',{
       method:'GET',
       headers: {
-        'Authorisation': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
@@ -27,7 +27,7 @@ const GroupView = ({ onSelectGroup }) => {
     fetch(`http://localhost:8000/api/v1/groups/${group}/members`,{
       method:'GET',
       headers: {
-        'Authorisation': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
@@ -45,7 +45,7 @@ const GroupView = ({ onSelectGroup }) => {
     fetch(`http://localhost:8000/api/v1/groups/${selectedGroup}/add-bill`, {
       method: 'POST',
       headers: {
-        'Authorisation':`Bearer ${token}`,
+        'Authorization':`Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ totalExpenditure: billAmount }),
