@@ -58,6 +58,15 @@ const Navbar = () => {
             </li>
 
             <li className='m-4 p-2'>
+              <Link to={"/piechart"} className=" hover:text-blue-700">
+                <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit '>
+                  <RiStockFill />
+                  <p className="text-xl">Charts</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='m-4 p-2'>
               <Link to={"/settings"} className=" hover:text-blue-700">
                 <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
                   <MdOutlineSettings />

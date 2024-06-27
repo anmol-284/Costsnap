@@ -41,7 +41,7 @@ router.get("/verify/:token/", verify);
 router.get("/getalltransactions",auth, getallTransaction);
 router.get("/recenttransactions", auth, recentTransactions);
 router.get("/getinvestment",auth, getinvestment);
-router.get("/stocktransactionhistory", stocktransactionhistory);
+router.get("/stocktransactionhistory", auth, stocktransactionhistory);
 router.get("/expensebycategory", auth, expenseByCategory);
 router.get("/getgroups", auth, groups);
 router.get("/groups/:id/members", auth, groupmembers);
