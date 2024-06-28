@@ -52,7 +52,7 @@ function App() {
         <Route path="forgetpassword" element={<ForgetPassword />} />
         <Route path="confirmpassword" element={<ConfirmPassword />} />
         <Route path="group-view" element={<GroupView />} />
-        <Route path="piechart" element={<DonutChart />} />
+        <Route path="chart" element={<Chartpage />} />
         <Route path="otpverify" element={<EmailVerificationPage />} />
       </Routes>
     </div>
