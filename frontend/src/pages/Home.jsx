@@ -1,50 +1,45 @@
 import React from 'react';
-import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import HighlightText from '../components/core/HighlightText';
-import CTAButton from "../components/core/Button";
+import { getCookie } from '../components/utils';
+import Dashboard from '../login/Dashboard';
 
+const HomePage = () => {
+  const token = getCookie('token');
 
-const Home = () => {
+  if (token) {
+    return <Dashboard />;
+  }
+
   return (
-    <div className='ml-60'>
-      Section1
-      <div className='  relative mx-auto flex flex-col w-11/12  max-w-maxContent items-center text-white justify-between'>
-        <Link to={"/expenses"} className="t ">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
+      {/* Header */}
+      <header className="w-full flex justify-between p-6 border-b border-gray-700">
+        <div className="flex items-center space-x-2">
+          <div className="w-6 h-6 bg-gray-700 rounded-full"></div>
+          <div className="text-lg font-semibold">CostSnap</div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <a href="/login" className="text-cyan-500 hover:text-cyan-400">Log In</a>
+        </div>
+      </header>
 
-      <div className='group mt-16 p-3 mx-auto rounded-full bg-neutral-900 font-bold text-neutral-500 transition-all duration-200 hover:scale-95 w-fit' >
-         
-         <div className='flex flex-row items-center gap-3 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-zinc-950  hover:text-green-700'>
-          
-            <p className="text-xl  ">Track your Expenses</p>
-            <FaArrowRight />
-            </div>
-     
-      </div>
-      </Link>
-
-      <div className='text-center text-2xl font-semibold mt-6'>
-        Empower Your Future with 
-        <HighlightText text={"Money Savings , Expenses & Investments"}/>
-      </div>
-
-      <div className=' mt-4  w-[90%] text-center text-lg font-bold text-slate-300 '>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus accusantium ratione nostrum eius deleniti suscipit, ex nihil velit quam? Quod atque repudiandae et provident labore, ad illum minima consectetur exercitationem?
-      </div>
-      
-
-      <div className='flex flex-row gap-7 mt-8'>
-        <CTAButton active={true} linkto={"/signup"}>Signup</CTAButton>
-
-        <CTAButton active={false} linkto={"/login"}>Login</CTAButton>
-     
-      </div>
-
-      </div>
-  
+      {/* Main Content */}
+      <main className="flex flex-col items-center py-20">
+        {/* Hero Section */}
+        <section className="text-center">
+          <h1 className="text-5xl font-bold mb-4">
+            Manage Your Expenses Easily With <span className="text-pink-500">CostSnap</span>
+          </h1>
+          <p className="text-lg mb-8">
+            We are providing the easiest way to manage expenses. Get a full view so you know where to save. Track spending and Split bills.
+          </p>
+          <button className="bg-gradient-to-r from-cyan-500 to-pink-500 text-black py-2 px-6 rounded-full">
+            <a href="/signup">Get Started</a>
+          </button>
+        </section>
+      </main>
     </div>
   );
 };
 
-export default Home;
-
+export default HomePage;

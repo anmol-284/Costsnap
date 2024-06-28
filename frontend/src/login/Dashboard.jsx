@@ -12,7 +12,7 @@ const Dashboard = () => {
     </div>
      {/* Section1 => buttons*/}
 
-     <div className='flex flex-row m-4 p-6 items-center justify-center'>
+     <div className='flex flex-row m-7 p-6 items-center justify-center'>
      <CTAButton  linkto={"/balance"} className="flex items-center justify-between">
       <p className='ml-[100px] mt-16 text-4xl'>$3,596</p>
      <p className='text-2xl mt-5'> Balance</p>
