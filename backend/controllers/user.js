@@ -179,7 +179,7 @@ exports.userlogin = async(req, res) => {
         // verify password & generate a JWT token
         if (await bcrypt.compare(password,loginUser.password)) {
             // password match
-            let token = jwt.sign(payload, process.env.SUPER_SECRET,{expiresIn:"1h"});
+            let token = jwt.sign(payload, process.env.SUPER_SECRET,{expiresIn:"2h"});
             // let token = jwt.sign(payload, process.env.SUPER_SECRET);
 
             loginUser.token = token;

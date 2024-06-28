@@ -14,7 +14,7 @@ const {splitBill} = require("../controllers/split");
 const {groupBills} = require("../controllers/groupbills");
 const {verifyOTP} = require("../controllers/verifyOTP");
 const {forgot} = require("../controllers/forgot");
-const {currentMonthPreview, expenseByCategory, averageCategories} =  require("../controllers/expense");
+const {expenseByCategory, weeklytransaction, monthlytransaction, yearlytransaction} =  require("../controllers/expense");
  
 const {auth} = require('../middlewares/Auth');
 
@@ -34,9 +34,10 @@ router.post("/addbill",auth, addbill);
 router.post("/addusers",auth, addusers);
 router.post("/forgot", forgot);
 
-router.get("/averageCategories", auth, averageCategories);
 router.get("/expenseByCategory", auth, expenseByCategory);
-router.get("/currentMonthPreview", auth, currentMonthPreview);
+router.get("/weeklytransaction", auth, weeklytransaction);
+router.get("/monthlytransaction", auth, monthlytransaction);
+router.get("/yearlytransaction", auth, yearlytransaction);
 router.get("/verify/:token/", verify);
 router.get("/getalltransactions",auth, getallTransaction);
 router.get("/recenttransactions", auth, recentTransactions);

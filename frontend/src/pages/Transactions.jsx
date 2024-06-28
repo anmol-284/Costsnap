@@ -79,6 +79,10 @@ const Transactions = () => {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
       console.log(formData);
 
+      if (formData.transactiontype === 'Income') {
+        formData.category = 'Income';
+      }
+
       const response = await fetch(`${SERVER_URL}/makeTransaction`, {
         method: 'POST',
         headers: {
@@ -109,7 +113,7 @@ const Transactions = () => {
 
 
       <div className="layout-content-container flex flex-col  flex-1 pl-24 pr-60">
-        <div className="flex flex-wrap justify-between gap-3 p-4">
+        <div className="flex flex-wrap justify-between gap-3 px-4 pb-4">
           <p class="text-white text-[32px] font-bold leading-tight min-w-72">Your
             transactions</p>
         </div>
@@ -170,7 +174,7 @@ const Transactions = () => {
               </div>
               <div class="flex flex-1 flex-col justify-center">
                 <p class="text-white text-base font-medium leading-normal">{transaction.transactionname}</p>
-                <p class="text-[#9dabb8] text-sm font-normal leading-normal">Transaction ID: {transaction.createdAt}</p>
+                <p class="text-[#9dabb8] text-sm font-normal leading-normal">Date: {new Date(transaction.createdAt).toLocaleDateString()}</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Category: {transaction.category}</p>
               </div>
             </div>
@@ -221,6 +225,7 @@ const Transactions = () => {
                 <option value="Expense" className='hover:bg-gray-400'>Expense</option>
                 <option value="Income">Income</option>
               </select>
+
 
               {(formData.transactiontype === 'Expense') && (
                 <div className='flex flex-col gap-2'>
