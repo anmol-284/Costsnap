@@ -4,9 +4,12 @@ const bodyParser = require('body-parser');
 const dbconnect = require('./config/database');
 const {userController} = require("./controllers/user");
 
-const app = express();
+const corsOptions = {
+    origin: 'https://costsnap.vercel.app', // allow only this origin
+    optionsSuccessStatus: 200
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({extended:true}));
 
 // it is used to import data from .env file
