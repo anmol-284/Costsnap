@@ -1,101 +1,11 @@
 const Transaction = require( '../models/transactionmodel');
-const mongoose = require("mongoose");
-const user = require("../controllers/user");
-// const create = async (req, res) => {
-//   try {
-//     req.body.recorded_by = req.auth._id
-//     const expense = new Expense(req.body)
-//     await expense.save()
-//     return res.status(200).json({
-//       message: "Expense recorded!"
-//     })
-//   } catch (err) {
-//     return res.status(400).json({
-//       error: errorHandler.getErrorMessage(err)
-//     }) 
-//   }
-// }
-	
-// const expenseByID = async (req, res, next, id) => {
-//     try {
-//       let expense = await Expense.findById(id).populate().exec()
-//       if (!expense)
-//         return res.status('400').json({
-//           error: "Expense record not found"
-//         })
-//       req.expense = expense
-//       next()
-//     } catch (err) {
-//       return res.status(400).json({
-//         error: errorHandler.getErrorMessage(err)
-//       })
-//     }
-// }
 
-// const read = (req, res) => {
-//     return res.json(req.expense)
-// }
 
-// const listByUser = async (req, res) => {
-//   let firstDay = req.query.firstDay
-//   let lastDay = req.query.lastDay
-//   try {
-//     let expenses = await Expense.find({'$and':[{'incurred_on':{'$gte': firstDay, '$lte':lastDay}}, {'recorded_by': req.auth._id}]}).sort('incurred_on').populate('recorded_by', '_id name')
-//     res.json(expenses)
-//   } catch (err){
-//     console.log(err)
-//     return res.status(400).json({
-//       error: errorHandler.getErrorMessage(err)
-//     })
-//   }
-// }
 
-//1.
-exports.currentMonthPreview = async (req, res) => {
-  const date = new Date(), y = date.getFullYear(), m = date.getMonth()
-  const firstDay = new Date(y, m, 1)
-  const lastDay = new Date(y, m + 1, 0)
-
-  const today = new Date()
-  today.setUTCHours(0,0,0,0)
-  
-  const tomorrow = new Date()
-  tomorrow.setUTCHours(0,0,0,0)
-  tomorrow.setDate(tomorrow.getDate()+1)
-  
-  const yesterday = new Date()
-  yesterday.setUTCHours(0,0,0,0)
-  yesterday.setDate(yesterday.getDate()-1)
-  
-  try {
-    let currentPreview = await Transaction.aggregate([
-      {
-          $facet: { month: [
-                              { $match : { createdAt : { $gte : firstDay, $lt: lastDay }, username: req.body.username }},
-                              { $group : { _id : "currentMonth" , totalSpent:  {$sum: "$amount"} } },
-                            ],
-                    today: [
-                      { $match : { createdAt : { $gte : today, $lt: tomorrow }, username: req.body.username }},
-                      { $group : { _id : "today" , totalSpent:  {$sum: "$amount"} } },
-                    ],
-                    yesterday: [
-                      { $match : { createdAt : { $gte : yesterday, $lt: today }, username: req.body.username }},
-                      { $group : { _id : "yesterday" , totalSpent:  {$sum: "$amount"} } },
-                    ]
-                  }
-      }])
-    let expensePreview = {month: currentPreview[0].month[0], today: currentPreview[0].today[0], yesterday: currentPreview[0].yesterday[0]}
-    res.json(expensePreview)
-  } catch (err){
-    console.log(err)
-  }
-}
-
-// 2.
 exports.expenseByCategory = async (req, res) => {
-  const date = new Date(),
-    y = date.getFullYear(),
-    m = date.getMonth();
+  const date = new Date();
+  const y = date.getFullYear();
+  const m = date.getMonth();
   const firstDay = new Date(y, m, 1);
   const lastDay = new Date(y, m + 1, 0);
 
@@ -105,7 +15,10 @@ exports.expenseByCategory = async (req, res) => {
         $facet: {
           average: [
             {
-              $match: { username: req.body.username },
+              $match: { 
+                username: req.body.username,
+                category: {$ne: "Income"},
+               },
             },
             {
               $group: {
@@ -132,6 +45,7 @@ exports.expenseByCategory = async (req, res) => {
               $match: {
                 createdAt: { $gte: firstDay, $lte: lastDay },
                 username: req.body.username,
+                category: { $ne:'Income'},
               },
             },
             {
@@ -165,115 +79,159 @@ exports.expenseByCategory = async (req, res) => {
 };
 
 
-// 3.a
-exports.averageCategories = async (req, res) => {
-  const date = new Date(),
-    y = date.getFullYear(),
-    m = date.getMonth();
-  const firstDay = new Date(y, m, 1);
-  const lastDay = new Date(y, m + 1, 0);
+exports.weeklytransaction= async(req, res) => {
 
   try {
-    let categoryMonthlyAvg = await Transaction.aggregate([
-      { $match : { createdAt : { $gte : firstDay, $lte: lastDay }, username: req.body.username }},
-      { $group : { _id : {category: "$category"}, totalSpent:  {$sum: "$amount"} } },
-      { $group: { _id: "$_id.category", avgSpent: { $avg: "$totalSpent"}}},
-      { $project: {x: '$_id', y: '$avgSpent'}}
-    ]).exec()
-    res.json({monthAVG:categoryMonthlyAvg})
-    console.log('firstDay:', firstDay);
-    console.log('lastDay:', lastDay);
-    console.log('username:', req.body.username);
+    const date = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(date.getDate() - 7);
+
+    const utcCurrentDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    const utcSevenDaysAgo = new Date(Date.UTC(sevenDaysAgo.getUTCFullYear(), sevenDaysAgo.getUTCMonth(), sevenDaysAgo.getUTCDate()));
+
+    const data = await Transaction.aggregate([
+      {
+        $match: {
+          username: req.body.username,
+          createdAt: { $gte: utcSevenDaysAgo, $lte: utcCurrentDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Income'] }, '$amount', 0],
+            },
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Expense'] }, '$amount', 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          date: '$_id',
+          totalIncome: 1,
+          totalExpense: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { date: 1 }, // Sort by date in ascending order
+      },
+    ]);
+
+    res.json({ data });
   } catch (err) {
-    console.log(err)
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
-// // 3.b
-// const yearlyExpenses = async (req, res) => {
-//   const y = req.query.year
-//   const firstDay = new Date(y, 0, 1)
-//   const lastDay = new Date(y, 12, 0)
-//   try {
-//     let totalMonthly = await Expense.aggregate(  [
-//       { $match: { incurred_on: { $gte : firstDay, $lt: lastDay }, recorded_by: mongoose.Types.ObjectId(req.auth._id) }},
-//       { $group: { _id: {$month: "$incurred_on"}, totalSpent:  {$sum: "$amount"} } },
-//       { $project: {x: '$_id', y: '$totalSpent'}}
-//     ]).exec()
-//     res.json({monthTot:totalMonthly})
-//   } catch (err){
-//     console.log(err)
-//     return res.status(400).json({
-//       error: errorHandler.getErrorMessage(err)
-//     })
-//   }
-// }
 
-// //3.c
-// const plotExpenses = async (req, res) => {
-//   const date = new Date(req.query.month), y = date.getFullYear(), m = date.getMonth()
-//   const firstDay = new Date(y, m, 1)
-//   const lastDay = new Date(y, m + 1, 0)
+exports.monthlytransaction= async(req, res) => {
 
-//   try {
-//     let totalMonthly = await Expense.aggregate(  [
-//       { $match: { incurred_on: { $gte : firstDay, $lt: lastDay }, recorded_by: mongoose.Types.ObjectId(req.auth._id) }},
-//       { $project: {x: {$dayOfMonth: '$incurred_on'}, y: '$amount'}}
-//     ]).exec()
-//     res.json(totalMonthly)
-//   } catch (err){
-//     console.log(err)
-//     return res.status(400).json({
-//       error: errorHandler.getErrorMessage(err)
-//     })
-//   }
-// }
+  try {
+    const lastDay = new Date();
+    const firstDay = new Date(lastDay.getFullYear(), lastDay.getMonth(), 1);
 
-//   const update = async (req, res) => {
-//     try {
-//       let expense = req.expense
-//       expense = extend(expense, req.body)
-//       expense.updated = Date.now()
-//       await expense.save()
-//       res.json(expense)
-//     } catch (err) {
-//       return res.status(400).json({
-//         error: errorHandler.getErrorMessage(err)
-//       })
-//     }
-//   }
-  
-// const remove = async (req, res) => {
-//     try {
-//       let expense = req.expense
-//       let deletedExpense = await expense.remove()
-//       res.json(deletedExpense)
-//     } catch (err) {
-//       return res.status(400).json({
-//         error: errorHandler.getErrorMessage(err)
-//       })
-//     }
-// }
+    const data = await Transaction.aggregate([
+      {
+        $match: {
+          username: req.body.username,
+          createdAt: { $gte: firstDay, $lte: lastDay },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m', date: '$createdAt' },
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Income'] }, '$amount', 0],
+            },
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Expense'] }, '$amount', 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          month: '$_id',
+          totalIncome: 1,
+          totalExpense: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { date: 1 }, 
+      },
+    ]);
 
-// const hasAuthorization = (req, res, next) => {
-//   const authorized = req.expense && req.auth && req.expense.recorded_by._id == req.auth._id
-//   if (!(authorized)) {
-//     return res.status('403').json({
-//       error: "User is not authorized"
-//     })
-//   }
-//   next()
-// }
+    res.json({ data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
-// export default currentMonthPreview;
-    // create,
-    // expenseByID,
-    // read,
-    // expenseByCategory,
-    // averageCategories,
-    // yearlyExpenses,
-    // plotExpenses,
-    // listByUser,
-    // remove,
-    // update,
-    // hasAuthorization
+
+exports.yearlytransaction= async(req, res) => {
+
+  try {
+    const lastDay = new Date();
+    const firstDay = new Date(lastDay.getFullYear(), 0, 1);
+
+    const data = await Transaction.aggregate([
+      {
+        $match: {
+          username: req.body.username,
+          createdAt: { $gte: firstDay, $lte: lastDay },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y', date: '$createdAt' },
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Income'] }, '$amount', 0],
+            },
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Expense'] }, '$amount', 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          year: '$_id',
+          totalIncome: 1,
+          totalExpense: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { date: 1 }, 
+      },
+    ]);
+
+    res.json({ data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+

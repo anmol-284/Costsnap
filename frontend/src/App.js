@@ -19,7 +19,7 @@ import ViewTransaction from './InvestPages/ViewTransaction';
 import ForgetPassword from './login/ForgetPassword';
 import ConfirmPassword from './login/ConfirmPassword';
 import GroupView from './SplitPages/GroupView';
-import DonutChart from './data/piechart';
+import Chartpage from './pages/PieChart';
 import EmailVerificationPage from './signup/Otpverify';
 import { getCookie } from '../src/components/utils';
 import Dashboard from './login/Dashboard';

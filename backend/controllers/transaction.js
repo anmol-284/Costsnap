@@ -4,10 +4,19 @@ const dashboard = require('../models/dashboardmodel');
 
 exports.makeTransaction = async (req, res) => {
     try {
-        const { transactionname, transactiontype, amount, category } = req.body;
+        const { transactionname, transactiontype, amount, category, createdAt } = req.body;
         const username = req.body.username;
-        
-        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category});
+        const currentDate = new Date();
+        const requestDate = new Date(req.body.date);
+        if(requestDate > currentDate){
+            res.status(400).json(
+                {
+                    success: false,
+                    message: "Date cannot be future."
+                }
+            );
+        }
+        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category, createdAt});
 
         const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
 
