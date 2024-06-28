@@ -109,7 +109,7 @@ const Transactions = () => {
   return (
     <div className="ml-60 my-16">
 
-      {/* <PieChart /> */}
+    
 
 
       <div className="layout-content-container flex flex-col  flex-1 pl-24 pr-60">
