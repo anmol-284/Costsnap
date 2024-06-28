@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const dbconnect = require('./config/database');
-const {userController} = require("./controllers/user");
+
+const app = express();
 
 const corsOptions = {
     origin: 'https://costsnap.vercel.app', // allow only this origin
