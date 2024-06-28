@@ -16,16 +16,15 @@ app.use(express.urlencoded({extended:true}));
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 
 // to parse the data
 app.use(express.json());
-
-
 app.use(bodyParser.json());
 
 // importing routes
 const router = require('./routes/userroute');
+
+app.options('*', cors(corsOptions));
 
 // mounting routes with different versions
 app.use("/api/v1", router);
