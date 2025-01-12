@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signup = () => {
   const [firstname, setFirstName] = useState('');
@@ -10,7 +11,8 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
+  const [showPassword, setShowPassword] = useState(false);
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -44,7 +46,7 @@ const Signup = () => {
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-    
+
     } catch (err) {
       console.error('Signup failed:', err.message);
       setError('Signup failed');
@@ -113,20 +115,28 @@ const Signup = () => {
                 <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
                   <label className="flex flex-col w-full">
                     <p className="text-white text-base font-medium leading-normal pb-2">Password</p>
-                    <input
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] text-base font-normal leading-normal"
-                      type="password"
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <div className='relative'>
+                      <input
+                        className="form-input w-full flex min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] pr-12 text-base font-normal leading-normal"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#9dabb8] focus:outline-none"
+                      >
+                        {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                      </button>
+                    </div>
                   </label>
                 </div>
                 <div className="flex py-3 w-full">
                   <button
-                    className={`flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 ${
-                      isLoggingIn ? 'bg-green-500' : 'bg-[#1980e6]'
-                    } text-white text-sm font-bold leading-normal tracking-[0.015em]`}
+                    className={`flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 ${isLoggingIn ? 'bg-green-500' : 'bg-[#1980e6]'
+                      } text-white text-sm font-bold leading-normal tracking-[0.015em]`}
                     onClick={handleSignup}
                   >
                     <span className="truncate">Signup</span>

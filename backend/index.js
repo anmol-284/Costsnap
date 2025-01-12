@@ -6,7 +6,7 @@ const dbconnect = require('./config/database');
 const app = express();
 
 const corsOptions = {
-    origin: 'https://costsnap.vercel.app', // allow only this origin
+    origin: process.env.BASE_URL, // allow only this origin
     optionsSuccessStatus: 200
 };
 

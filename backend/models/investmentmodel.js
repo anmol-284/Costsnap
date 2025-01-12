@@ -8,7 +8,6 @@ const investSchema = new mongoose.Schema(
         username:{
             type: String,
             required: true,
-            maxLenth: 50,
         },
         totalinvestment:{
             type: Number,

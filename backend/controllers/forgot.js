@@ -31,7 +31,7 @@ exports.forgot = async (req, res) => {
       from: process.env.USER,
       to: email,
       subject: 'Reset Password Link',
-      text: `http://localhost:5173/reset_password/${foundUser._id}/${token}`,
+      text: `https://costsnap.vercel.app/reset_password/${foundUser._id}/${token}`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

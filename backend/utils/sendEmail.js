@@ -1,7 +1,5 @@
 // importing nodemailer module and enviroment variables
 const nodemailer = require("nodemailer");
-const userOtpVerification = require("../models/userOtpVerification");
-const bcrypt = require('bcrypt');
 require("dotenv").config();
 
 // Creating Transporter here
@@ -16,33 +14,15 @@ const transporter = nodemailer.createTransport({
 });
 
 // Sending Conformation mail to user on its email
-exports.sendConfirmationEmail = async ({_id, email}, res) => {
+exports.sendConfirmationEmail = async ({email, verificationToken}, res) => {
     try {
-
-        const otp = `${Math.floor(1000 + Math.random() * 9000)}`; 
-
+        const verificationLink = `${process.env.BASE_URL}/verifyemail?vtoken=${verificationToken}`;
         const mailOptions = {
             from:process.env.USER,
             to:email,
             subject:"Verify Your Email",
-            html:`<p>Enter <b>${otp}</b> at CostSnap to verify your Email address and complete your Sign up process now.</p>
-            <p>This code <b>expires in 1 hour </b>.</p>`,
+            html:`<p>Please verify your email by clicking <a href="${verificationLink}">here</a>.</p>`,
         };
-
-        // hash the Otp
-        const saltRounds = 10;
-
-        const hashedOtp = await bcrypt.hash(otp, saltRounds);
-
-        const newuserOtpVerification = new userOtpVerification({
-            userid: _id,
-            otp: hashedOtp,
-            createdAt: Date.now(),
-            expiresAt: Date.now() + 5*60*1000,
-        });
-
-        // save the otp in database
-        await newuserOtpVerification.save();
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
