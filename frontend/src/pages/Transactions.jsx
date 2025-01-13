@@ -1,8 +1,9 @@
 import React from 'react';
-import TransactionList from '../data/TransactionList';
-import PieChart from './PieChart';
-
 import { useState, useEffect } from 'react';
+import { FaTrash } from 'react-icons/fa';
+import { getCookie } from '../components/utils';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Transactions = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -13,6 +14,13 @@ const Transactions = () => {
     amount: '',
     transactiontype: '', // New entry for transaction type
   });
+  const[filterState, setFilterState] = React.useState({
+    transactionType: '',
+    month: '',
+    date: '',
+    expenseType: '',
+    search: '',
+  });
   const [transactions, setTransactions] = useState([]);
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -21,7 +29,7 @@ const Transactions = () => {
   }, []);
 
   const fetchtransactions = async () => {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = getCookie('token');
 
 
     fetch(`${SERVER_URL}/getalltransactions`, {
@@ -35,9 +43,40 @@ const Transactions = () => {
       .catch((error) => console.error('Error fetching transactions:', error));
   }
 
+
+  
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilterState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const fetchFilteredTransactions = async () => {
+    const params = new URLSearchParams();
+    const token = getCookie('token');
+    Object.entries(filterState).forEach(([key, value]) => {
+      if (value) params.append(key, value);
+    });
+
+    const response = await fetch(`${SERVER_URL}/filteredtransactions?${params.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    setTransactions(data);
+  };
+
+  useEffect(() => {
+    fetchFilteredTransactions();
+  }, [filterState]);
+
   const handleDelete = (transactionId) => {
 
-    const token = document.cookie.replace(/(?:(?:^|.;\s)token\s*=\s*([^;]).$)|^.*$/, '$1');
+    const token = getCookie('token');
+
+    console.log(token);
 
     fetch(`${SERVER_URL}/deletetransaction/${transactionId}`, {
       method: 'DELETE',
@@ -76,7 +115,7 @@ const Transactions = () => {
 
     try {
 
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
       console.log(formData);
 
       if (formData.transactiontype === 'Income') {
@@ -109,31 +148,70 @@ const Transactions = () => {
   return (
     <div className="ml-60 my-16">
 
-    
-
-
       <div className="layout-content-container flex flex-col  flex-1 pl-24 pr-60">
         <div className="flex flex-wrap justify-between gap-3 px-4 pb-4">
           <p class="text-white text-[32px] font-bold leading-tight min-w-72">Your
             transactions</p>
         </div>
+
+
+
         <div className="flex gap-3 p-3 overflow-x-hidden justify-between">
-          <div className='flex gap-2'>
-            <div
-              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-              <p className="text-white text-sm font-medium leading-normal">All</p>
-            </div>
-            <div
-              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-              <p className="text-white text-sm font-medium leading-normal">Income</p>
-            </div>
-            <div
-              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#293038] pl-4 pr-4">
-              <p className="text-white text-sm font-medium leading-normal">Expense</p>
-            </div>
+          <div className="flex flex-wrap gap-2">
+
+            <select
+              name="transactionType"
+              value={filterState.transactionType}
+              onChange={handleFilterChange}
+              className="bg-[#293038] text-white text-sm rounded-xl px-4"
+            >
+              <option value="">All Types</option>
+              <option value="Income">Income</option>
+              <option value="Expense">Expense</option>
+            </select>
+
+
+            <input
+              type="month"
+              name="month"
+              value={filterState.month}
+              onChange={handleFilterChange}
+              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+            />
+
+
+            <input
+              type="date"
+              name="date"
+              value={filterState.date}
+              onChange={handleFilterChange}
+              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+            />
+
+
+            <select
+              name="expenseType"
+              value={filterState.expenseType}
+              onChange={handleFilterChange}
+              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+            >
+              <option value="">All Categories</option>
+              <option value="Food">Food</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Travel">Travel</option>
+            </select>
+
+
+            <button
+              className="bg-gray-600 text-white text-sm rounded-xl px-4 py-2"
+              onClick={() => setFilterState({ transactionType: '', month: '', date: '', expenseType: '', search: '' })}
+            >
+              Clear Filters
+            </button>
           </div>
           <button
-            className="bg-[#293038] text-sm pl-4 pr-4 text-white rounded-xl shadow-md hover:bg-gray-600"
+            className="bg-[#293038] text-sm px-4 text-white rounded-xl shadow-md hover:bg-gray-600"
             onClick={handleAddTransactionClick}
           >
             Add Transaction
@@ -152,7 +230,7 @@ const Transactions = () => {
                   </path>
                 </svg>
               </div>
-              <input placeholder="Search all transactions"
+              <input type="text" name="search" placeholder="Search all transactions" value={filterState.search} onChange={handleFilterChange}
                 className="form-input flex w-full min-w-0 flex-1 rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
               />
             </div>
@@ -163,7 +241,6 @@ const Transactions = () => {
           <div
             key={transaction._id}
             className="flex gap-4 mx-4 py-3 justify-between border-b border-[#3c4753]">
-            {/* <button className="text-red-500" onClick={() => handleDelete(transaction._id)}> Delete </button> */}
             <div class="flex items-start gap-4">
               <div class="text-white flex items-center justify-center rounded-lg bg-[#293038] shrink-0 size-40" data-icon="CreditCard" data-size="32px" data-weight="regular">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
@@ -178,10 +255,11 @@ const Transactions = () => {
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Category: {transaction.category}</p>
               </div>
             </div>
-            <div class="shrink-0"><p class="text-white text-base font-normal leading-normal">
-
-
-              {(transaction.transactiontype == "Income") ? (<div className='text-green-400'>+{transaction.amount}</div>) : (<div className='text-red-400'>-{transaction.amount}</div>)}</p></div>
+            <div class="shrink-0 flex flex-col items-end justify-around pr-8">
+              <p class="text-white text-base font-normal leading-normal">
+                {(transaction.transactiontype === "Income") ? (<div className='text-green-400'>+{transaction.amount}</div>) : (<div className='text-red-400'>-{transaction.amount}</div>)}</p>
+              <button className='text-gray-500' onClick={() => handleDelete(transaction._id)}> <FaTrash size={16}></FaTrash> </button>
+            </div>
           </div>
         ))}
 

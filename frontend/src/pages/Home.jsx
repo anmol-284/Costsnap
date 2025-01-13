@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCookie } from '../components/utils';
-import Dashboard from '../login/Dashboard';
+import Dashboard from './Dashboard';
 
 const HomePage = () => {
   const token = getCookie('token');
 
+  console.log(token);
+  
   if (token) {
     return <Dashboard />;
   }

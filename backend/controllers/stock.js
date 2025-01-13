@@ -6,10 +6,16 @@ exports.stocktransaction = async (req, res) => {
     try {
         const { stockname, transactiontype, unitprice, amount } = req.body;
         const username = req.body.username;
-        const stockcreated = await stock.create({ username, stockname, transactiontype, unitprice, amount });
+
+        if(unitprice === 0 || amount === 0){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid unitprice or amount."
+            });
+        }
 
         const investid = await investment.findOne({ username: username }).populate().exec();
-        
+
 
         if (investid) {
             if (transactiontype === "buy") {
@@ -19,8 +25,8 @@ exports.stocktransaction = async (req, res) => {
 
                 if (index !== -1) {                                         // if stock is already present then update the values
                     investid.holdings[index].units += units;
-                    investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + (amount)*1) / investid.holdings[index].units;
-                    investid.holdings[index].amount += amount*1;
+                    investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + (amount) * 1) / investid.holdings[index].units;
+                    investid.holdings[index].amount += amount * 1;
                 } else {                                                   // stock not present then add it to holdings
                     investid.holdings.push({
                         stockname: stockname,
@@ -31,12 +37,12 @@ exports.stocktransaction = async (req, res) => {
 
                 }
 
-                investid.totalinvestment += amount*1;            // updating totalinvestment value
+                investid.totalinvestment += amount * 1;            // updating totalinvestment value
 
             } else if (transactiontype === "sell") {
                 const index = investid.holdings.findIndex(holding => holding.stockname === stockname);
                 const units = amount / unitprice;
-
+                console.log(index);
                 if (index !== -1) {
                     if (investid.holdings[index].units < units) {
                         return res.status(400).json({
@@ -59,16 +65,21 @@ exports.stocktransaction = async (req, res) => {
                         investid.totalinvestment -= investid.holdings[index].averageprice * units;
                     }
 
-                }      // else index === -1
+                }else{
+                    return res.status(404).json({
+                        success: false,
+                        message: "Stock not found."
+                    });
+                }
 
 
 
             } else {
 
-                return res.status(401).json({
+                return res.status(400).json({
                     success: false,
-                    message: "Stock not found."
-                })
+                    message: "Invalid transaction type."
+                });
 
             }
 
@@ -79,6 +90,9 @@ exports.stocktransaction = async (req, res) => {
         await investid.save();       // saving the stock in investmentmodel
 
         console.log(investid);
+
+        
+        const stockcreated = await stock.create({ username, stockname, transactiontype, unitprice, amount });
 
 
         res.status(200).json(             // send a json response and success flag
@@ -105,7 +119,7 @@ exports.stocktransactionhistory = async (req, res) => {
     try {
         const username = req.body.username;
         console.log(username);
-        const stocktransactionhistory = await stock.find({ username:username }).sort({ createdAt: -1 }).populate().exec();
+        const stocktransactionhistory = await stock.find({ username: username }).sort({ createdAt: -1 }).populate().exec();
 
         // console.log(stocktransactionhistory);
 
@@ -188,7 +202,7 @@ exports.updatestocktransaction = async (req, res) => {            // expenses to
         await investid.save();
 
         const { stockname, transactiontype, unitprice, amount } = req.body;
-        updatetransaction = await stock.findByIdAndUpdate(id,{ stockname, transactiontype, unitprice, amount }, {new: true});
+        updatetransaction = await stock.findByIdAndUpdate(id, { stockname, transactiontype, unitprice, amount }, { new: true });
 
         if (investid) {
             if (transactiontype === "buy") {
@@ -288,34 +302,56 @@ exports.updatestocktransaction = async (req, res) => {            // expenses to
 }
 
 
-exports.deletestocktransaction = async (req, res) => {           
+exports.deletestocktransaction = async (req, res) => {
     try {
 
-        const { id } = req.params;
+        const { transactionId } = req.params;
         const username = req.body.username;
 
-        let deletetransaction = await stock.findById(id).populate().exec();
-        // const { stockname, transactiontype, unitprice, amount } = deletetransaction;
-        const investid = await investment.findOne({ username: username }).populate().exec();
+        const deletetransaction = await stock.findByIdAndDelete(transactionId).populate().exec();
+        if (!deletetransaction) {
+            return res.status(404).json({
+                success: false,
+                message: "Transaction not found.",
+            });
+        }
 
+        const investid = await investment.findOne({ username: username }).populate().exec();
+        if (!investid) {
+            return res.status(404).json({
+                success: false,
+                message: "Investment record not found for the user.",
+            });
+        }
 
         if (deletetransaction) {
+            console.log('stock transaction deleted');
             if (deletetransaction.transactiontype === "buy") {
 
-                let index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
-                let units = deletetransaction.amount / deletetransaction.unitprice;
+                const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
+                const units = deletetransaction.amount / deletetransaction.unitprice;
 
                 if (index !== -1) {                                         // if stock is already present then update the values
                     investid.holdings[index].units -= units;
                     investid.holdings[index].amount -= deletetransaction.amount;
-                    investid.holdings[index].averageprice = (investid.holdings[index].amount) / investid.holdings[index].units;
+
+                    if (investid.holdings[index].units > 0) {
+                        investid.holdings[index].averageprice = investid.holdings[index].amount / investid.holdings[index].units;
+                    } else {
+                        investid.holdings.splice(index, 1);
+                    }
+
+                    investid.totalinvestment -= deletetransaction.amount;  
+                }else {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Investment holding record not found for the user.",
+                    });
                 }
 
-                investid.totalinvestment -= deletetransaction.amount;            // updating totalinvestment value
-
             } else if (deletetransaction.transactiontype === "sell") {
-                let index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
-                let units = deletetransaction.amount / deletetransaction.unitprice;
+                const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
+                const units = deletetransaction.amount / deletetransaction.unitprice;
 
                 if (index !== -1) {
 
@@ -335,8 +371,6 @@ exports.deletestocktransaction = async (req, res) => {
                     investid.totalinvestment += deletetransaction.amount;
                 }
 
-
-
             }
 
         } else {
@@ -344,21 +378,6 @@ exports.deletestocktransaction = async (req, res) => {
         }
 
         await investid.save();
-
-        deletetransaction = await stock.findByIdAndDelete(id);
-
-
-
-        await investid.save();       // saving the stock in investmentmodel
-
-
-
-        if (!deletetransaction) {
-            return res.status(401).json({
-                success: false,
-                message: "Transaction not found."
-            })
-        }
 
         return res.status(200).json({
             success: true,

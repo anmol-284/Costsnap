@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { getCookie } from '../components/utils';
+import { FaTrash } from 'react-icons/fa';
 
 const ViewTransaction = () => {
   const [transactions, setTransactions] = useState([]);
   const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
   
   useEffect(() => {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = getCookie('token');
 
     fetch(`${SERVER_URL}/stocktransactionhistory`, {
       method: 'GET',
@@ -23,12 +25,12 @@ const ViewTransaction = () => {
 
   const handleDelete = (transactionId) => {
     // Delete a transaction with the given ID
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = getCookie('token');
 
     fetch(`${SERVER_URL}/deletestocktransaction/${transactionId}`, {
       method: 'DELETE',
       headers: {
-        'Authorisation': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
@@ -73,14 +75,16 @@ const ViewTransaction = () => {
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.transactiontype}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.stockname}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.unitprice}</p>
-            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.amount}</p>
-            <p className='px-4 py-4 text-[#9dabb8] text-sm'>1000</p>
-            {/* <button
-              className="text-red-500"
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{transaction.amount/transaction.unitprice}</p>
+            <div className='flex justify-between pr-6'>
+            <p className='pl-4 py-4 text-[#9dabb8] text-sm'>{transaction.amount}</p>
+            <button
+              className="text-gray-500 px-0"
               onClick={() => handleDelete(transaction._id)}
             >
-              Delete
-            </button> */}
+              <FaTrash size={16}></FaTrash>
+            </button>
+            </div>
           </div>
         ))}
       </div>

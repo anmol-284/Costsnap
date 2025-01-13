@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaChartPie } from 'react-icons/fa';
 import { BiTransfer } from 'react-icons/bi';
 import { LuSplit } from 'react-icons/lu';
 import { RiStockFill } from 'react-icons/ri';
 import { MdOutlineSettings } from 'react-icons/md';
 import { TbLogout } from 'react-icons/tb';
+
 import withAuth from '../Hoc';  // Ensure correct path to withAuth
 
 const Navbar = () => {
@@ -19,7 +20,9 @@ const Navbar = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     // Redirect to login page or home page
-    navigate('/'); // Adjust the path based on your routing
+    setTimeout(() => {
+      navigate('/login');
+    }, 500);
   };
 
   return (
@@ -33,7 +36,7 @@ const Navbar = () => {
       </div>
 
       <nav className='w-60' style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-        <ul className='m-6 p-5 text-gray-400'>
+        <ul className='m-6 px-5 pb-5 text-gray-300'>
           <li className='m-4 p-2'>
             <Link to="/dashboard" className="hover:text-blue-700">
               <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
@@ -73,7 +76,7 @@ const Navbar = () => {
           <li className='m-4 p-2'>
             <Link to={"/chart"} className=" hover:text-blue-700">
               <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit '>
-                <RiStockFill />
+                <FaChartPie />
                 <p className="text-xl">Charts</p>
               </div>
             </Link>
@@ -88,7 +91,7 @@ const Navbar = () => {
             </Link>
           </li>
 
-          <li className='m-4 pt-20'>
+          <li className='m-4 px-2 pt-20'>
             <Link className="text-red-700 hover:text-blue-700">
               <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
                 <TbLogout />

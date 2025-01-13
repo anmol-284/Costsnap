@@ -18,7 +18,7 @@ const Login = ({ onLogin }) => {
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      console.log(SERVER_URL);
+      // console.log(SERVER_URL);
       const response = await fetch(`${SERVER_URL}/userlogin`, {
         method: 'POST',
         headers: {

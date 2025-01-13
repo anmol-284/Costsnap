@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getCookie } from '../components/utils';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Investments = () => {
 
   const [investments, setInvestments] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [formData, setFormData] = useState({
-    transactiontype: '', // New entry for transaction type
+    transactiontype: '',
     stockname: '',
     unitprice: '',
     amount: '',
@@ -19,18 +22,32 @@ const Investments = () => {
   }, []);
 
   const fetchInvestments = async () => {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    // Fetch transactions from the backend API
 
-    fetch(`${SERVER_URL}/getinvestment`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setInvestments(response.data))
-      .catch((error) => console.error('Error fetching transactions:', error));
+    try {
+      const token = getCookie('token');
+
+      const response = await fetch(`${SERVER_URL}/getinvestment`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if(response.ok){
+        setInvestments(result.data);
+      }else{
+        toast.error(result.message);
+      }
+
+      // console.log('Backend response:', result);
+
+    } catch (error) {
+      toast.error('Error fetching transaction');
+      console.error('Error fetching transaction:', error);
+    }
   }
 
   // if (!Array.isArray(investments.holdings)) {
@@ -55,11 +72,7 @@ const Investments = () => {
     setIsFormVisible(false);
 
     try {
-      // const newInvestments = { ...formData };
-      // setInvestments([...investments, newInvestments]);
-
-
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
       console.log(formData);
 
       const response = await fetch(`${SERVER_URL}/stock`, {
@@ -72,6 +85,11 @@ const Investments = () => {
       });
 
       const result = await response.json();
+      if(response.ok){
+        toast.success(result.message);
+      }else{
+        toast.error(result.message);
+      }
 
       console.log('Backend response:', result);
 
@@ -79,6 +97,7 @@ const Investments = () => {
 
       setIsFormVisible(false);
     } catch (error) {
+      toast.error('Error adding transaction');
       console.error('Error adding transaction:', error);
     } finally {
       setIsFormVisible(false);

@@ -22,7 +22,8 @@ import GroupView from './SplitPages/GroupView';
 import Chartpage from './pages/PieChart';
 import EmailVerificationPage from './pages/VerifyEmail';
 import { getCookie } from '../src/components/utils';
-import Dashboard from './login/Dashboard';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import Dashboard from './pages/Dashboard';
 import { useEffect, useState } from 'react';
 
 function App() {
@@ -38,24 +39,24 @@ function App() {
       {token && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="transactions" element={<Transactions />} />
-        <Route path="splitbills" element={<SplitBills />} />
-        <Route path="investments" element={<Investments />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+        <Route path="transactions" element={<ProtectedRoute> <Transactions /> </ProtectedRoute>} />
+        <Route path="splitbills" element={<ProtectedRoute> <SplitBills /> </ProtectedRoute>} />
+        <Route path="investments" element={<ProtectedRoute> <Investments /> </ProtectedRoute>} />
+        <Route path="settings" element={<ProtectedRoute> <Settings /> </ProtectedRoute>} />
         <Route path="login" element={<Login onLogin={(newToken) => setToken(newToken)} />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="about" element={<About />} />
-        <Route path="exportdata" element={<ExportData />} />
-        <Route path="help" element={<Help />} />
-        <Route path="notifications" element={<Notifications />} />
+        <Route path="about" element={<ProtectedRoute> <About /> </ProtectedRoute>} />
+        <Route path="exportdata" element={<ProtectedRoute> <ExportData /> </ProtectedRoute>} />
+        <Route path="help" element={<ProtectedRoute> <Help /> </ProtectedRoute>} />
+        <Route path="notifications" element={<ProtectedRoute> <Notifications /> </ProtectedRoute>} />
         <Route path="theme" element={<Theme />} />
-        <Route path="addtransaction" element={<AddTransaction />} />
-        <Route path="viewtransaction" element={<ViewTransaction />} />
+        <Route path="addtransaction" element={<ProtectedRoute> <AddTransaction /> </ProtectedRoute>} />
+        <Route path="viewtransaction" element={<ProtectedRoute> <ViewTransaction /> </ProtectedRoute>} />
         <Route path="forgetpassword" element={<ForgetPassword />} />
         <Route path="confirmpassword" element={<ConfirmPassword />} />
-        <Route path="group-view" element={<GroupView />} />
-        <Route path="chart" element={<Chartpage />} />
+        <Route path="group-view" element={<ProtectedRoute> <GroupView /> </ProtectedRoute>} />
+        <Route path="chart" element={<ProtectedRoute> <Chartpage /> </ProtectedRoute>} />
         <Route path="verifyemail" element={<EmailVerificationPage />} />
       </Routes>
     </div>

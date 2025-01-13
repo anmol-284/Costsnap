@@ -1,5 +1,4 @@
-import React from 'react'
-import CTAButton from "../components/core/Button"
+import React from 'react';
 
 const ExportData = () => {
   return (
@@ -15,7 +14,7 @@ const ExportData = () => {
         </div>
 
         <div className='flex flex-row gap-7 mt-8'>
-        <CTAButton active={true} linkto={"/Export PDF"}>Export PDF</CTAButton>
+        <button active={true} linkto={"/Export PDF"}>Export PDF</button>
     
       </div>
 

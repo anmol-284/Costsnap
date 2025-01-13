@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getCookie } from '../components/utils';
 
 const AddTransaction = () => {
   const [transactiontype, setTransactiontype] = useState('');
@@ -9,7 +10,7 @@ const AddTransaction = () => {
   const [error, setError] = useState('');
 
   const handleAddTransaction = async () => {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = getCookie('token');
     try {
       const response = await fetch('http://localhost:8000/api/v1/stock', {
         method: 'POST',

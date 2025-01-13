@@ -8,7 +8,7 @@ exports.makeTransaction = async (req, res) => {
         const username = req.body.username;
         const currentDate = new Date();
         const requestDate = new Date(req.body.date);
-        if(requestDate > currentDate){
+        if (requestDate > currentDate) {
             res.status(400).json(
                 {
                     success: false,
@@ -16,11 +16,11 @@ exports.makeTransaction = async (req, res) => {
                 }
             );
         }
-        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category, createdAt});
+        const createdtransaction = await transaction.create({ username, transactionname, transactiontype, amount, category, createdAt });
 
         const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
 
-        if(dashboardid) {
+        if (dashboardid) {
 
             if (transactiontype === "Expense") {
                 dashboardid.expense += amount;
@@ -28,11 +28,11 @@ exports.makeTransaction = async (req, res) => {
             } else if (transactiontype === "Income") {
                 dashboardid.income += amount;
                 dashboardid.balance += amount;
-            }else {
+            } else {
                 console.log("Transaction type InValid");
             }
             await dashboardid.save();
-            
+
         }
 
         console.log("transaction added");
@@ -85,6 +85,72 @@ exports.getallTransaction = async (req, res) => {
                 message: err.message
             }
         )
+    }
+}
+
+exports.filteredTransactions = async (req, res) => {
+    try {
+        const { transactionType, month, date, expenseType, search } = req.query;
+        const username = req.body.username;
+        console.log(transactionType, month, date, expenseType, search);
+        const pipeline = [];
+
+        pipeline.push({
+            $match: { username: username },
+        });
+
+        if (transactionType) {
+            pipeline.push({
+                $match: { transactiontype: transactionType },
+            });
+        }
+
+        if (month) {
+            const [year, monthNum] = month.split("-");
+            pipeline.push({
+                $match: {
+                    createdAt: {
+                        $gte: new Date(`${year}-${monthNum}-01`),
+                        $lt: new Date(`${year}-${Number(monthNum) + 1}-01`),
+                    },
+                },
+            });
+        }
+
+        if (date) {
+            const targetDate = new Date(date);
+            pipeline.push({
+                $match: {
+                    createdAt: {
+                        $gte: new Date(targetDate.setHours(0, 0, 0, 0)),
+                        $lt: new Date(targetDate.setHours(23, 59, 59, 999)),
+                    },
+                },
+            });
+        }
+
+        if (expenseType) {
+            pipeline.push({
+                $match: { category: expenseType },
+            });
+        }
+
+        if (search) {
+            pipeline.push({
+                $match: { transactionname: { $regex: search, $options: "i" } },
+            });
+        }
+
+        pipeline.push({
+            $sort: { createdAt: -1 },
+        });
+
+        const transactions = await transaction.aggregate(pipeline);
+
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+        res.status(500).json({ error: "Failed to fetch transactions" });
     }
 }
 
@@ -157,24 +223,26 @@ exports.updateTransaction = async (req, res) => {            // expenses to be u
 
 exports.deleteTransaction = async (req, res) => {
     try {
+        const username = req.body.username;
+        const { transactionId } = req.params;
 
-        const { id } = req.params;
+        const deletetransaction = await transaction.findByIdAndDelete(transactionId).populate().exec();
 
-        const deletetransaction = await transaction.findByIdAndDelete(id);
+        console.log(deletetransaction);
 
-        const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
+        // const dashboardid = await dashboard.findOne({ username: username }).populate().exec();
 
-        if (deletetransaction.transactiontype === "Spend") {
-            dashboardid.expense -= amount;
-            dashboardid.balance += amount;
-        } else if (deletetransaction.transactiontype === "Income") {
-            dashboardid.income -= amount;
-            dashboardid.balance -= amount;
-        } else {
-            console.log("Transaction type INvalid");
-        }
+        // if (deletetransaction.transactiontype === 'Expense') {
+        //     dashboardid.expense -= amount;
+        //     dashboardid.balance += amount;
+        // } else if (deletetransaction.transactiontype === 'Income') {
+        //     dashboardid.income -= amount;
+        //     dashboardid.balance -= amount;
+        // } else {
+        //     console.log("Transaction type INvalid");
+        // }
 
-        await dashboardid.save();
+        // await dashboardid.save();
 
         if (!deletetransaction) {
             return res.status(401).json({

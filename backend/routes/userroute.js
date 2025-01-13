@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 
-const {makeTransaction, getallTransaction, recentTransactions, updateTransaction, deleteTransaction} = require('../controllers/transaction');
+const {makeTransaction, getallTransaction, filteredTransactions, recentTransactions, updateTransaction, deleteTransaction} = require('../controllers/transaction');
 const {stocktransaction, stocktransactionhistory, deletestocktransaction} = require('../controllers/stock');
 const {investment, getinvestment} = require('../controllers/investment');
-const {usersignup, verify, userlogin, logout} = require('../controllers/user');
+const {usersignup, userlogin, logout} = require('../controllers/user');
 const {createGroup, addbill, addusers, groups, groupmembers} = require("../controllers/group");
 const {splitBill} = require("../controllers/split");
 const {groupBills} = require("../controllers/groupbills");
@@ -35,6 +35,7 @@ router.get("/weeklytransaction", auth, weeklytransaction);
 router.get("/monthlytransaction", auth, monthlytransaction);
 router.get("/yearlytransaction", auth, yearlytransaction);
 router.get("/getalltransactions",auth, getallTransaction);
+router.get("/filteredtransactions",auth, filteredTransactions);
 router.get("/recenttransactions", auth, recentTransactions);
 router.get("/getinvestment",auth, getinvestment);
 router.get("/stocktransactionhistory", auth, stocktransactionhistory);
@@ -46,7 +47,7 @@ router.get("/groups/:id/members", auth, groupmembers);
 
 router.put("/updatetransactions/:id",auth, updateTransaction);
 
-router.delete("/deletetransaction/:id", auth, deleteTransaction);
-router.delete("/deletestocktransaction/:id", auth, deletestocktransaction);
+router.delete("/deletetransaction/:transactionId", auth, deleteTransaction);
+router.delete("/deletestocktransaction/:transactionId", auth, deletestocktransaction);
 
 module.exports = router;
