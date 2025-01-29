@@ -30,13 +30,13 @@ router.post("/addbill",auth, addbill);
 router.post("/addusers",auth, addusers);
 router.post("/forgot", forgot);
 
+router.get("/recenttransactions", auth, recentTransactions);
 router.get("/expenseByCategory", auth, expenseByCategory);
 router.get("/weeklytransaction", auth, weeklytransaction);
 router.get("/monthlytransaction", auth, monthlytransaction);
 router.get("/yearlytransaction", auth, yearlytransaction);
 router.get("/getalltransactions",auth, getallTransaction);
 router.get("/filteredtransactions",auth, filteredTransactions);
-router.get("/recenttransactions", auth, recentTransactions);
 router.get("/getinvestment",auth, getinvestment);
 router.get("/stocktransactionhistory", auth, stocktransactionhistory);
 router.get("/expensebycategory", auth, expenseByCategory);

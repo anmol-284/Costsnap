@@ -9,7 +9,7 @@ module.exports = {
         customColor: 'rgb(17, 20, 24)',
       },
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },

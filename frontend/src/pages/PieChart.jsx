@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Pie, Doughnut, Line } from 'react-chartjs-2';
+import { React, useEffect, useState } from 'react';
+import { Doughnut, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { getCookie } from '../components/utils';
 
 // Register the required elements
 Chart.register(ArcElement, Tooltip, Legend);
@@ -30,13 +30,13 @@ const Chartpage = () => {
 
   useEffect(() => {
 
-    console.log("updated mnoth", monthdata);
+    console.log("updated month", monthdata);
 
   }, [monthdata]);
 
   const fetchData = async () => {
     try {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
 
       const response = await fetch(`${SERVER_URL}/expenseByCategory`, {
         method: 'GET',
@@ -88,7 +88,7 @@ const Chartpage = () => {
 
   const fetchweekData = async () => {
     try {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
 
       const response = await fetch(`${SERVER_URL}/weeklytransaction`, {
         method: 'GET',
@@ -146,7 +146,7 @@ const Chartpage = () => {
 
   const fetchmonthData = async () => {
     try {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
 
       const response = await fetch(`${SERVER_URL}/monthlytransaction`, {
         method: 'GET',
@@ -205,7 +205,7 @@ const Chartpage = () => {
 
   const fetchyearData = async () => {
     try {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      const token = getCookie('token');
 
       const response = await fetch(`${SERVER_URL}/yearlytransaction`, {
         method: 'GET',
@@ -363,7 +363,7 @@ const Chartpage = () => {
             {yeardata ? (
               <div className=''><Line data={yeardata} options={lineoptions}  /></div>
             ) : (
-              <p>Loading line data...</p>
+              <p>No available data</p>
             )}
           </div>
         </div>

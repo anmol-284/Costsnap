@@ -35,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <div className='w-screen min-h-screen bg-customColor flex flex-col font-inte'>
+    <div className='w-screen min-h-screen bg-gray-950 flex flex-col'>
       {token && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />

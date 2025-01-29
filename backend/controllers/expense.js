@@ -137,8 +137,11 @@ exports.weeklytransaction= async(req, res) => {
 exports.monthlytransaction= async(req, res) => {
 
   try {
-    const lastDay = new Date();
-    const firstDay = new Date(lastDay.getFullYear(), lastDay.getMonth(), 1);
+    const date = new Date();
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m, 1);
+    const lastDay = new Date(y, m + 1, 0);
 
     const data = await Transaction.aggregate([
       {
@@ -188,8 +191,10 @@ exports.monthlytransaction= async(req, res) => {
 exports.yearlytransaction= async(req, res) => {
 
   try {
-    const lastDay = new Date();
-    const firstDay = new Date(lastDay.getFullYear(), 0, 1);
+    const date = new Date();
+    const y = date.getFullYear();
+    const firstDay = new Date(y, 1, 0);
+    const lastDay = new Date(y+1, 1, 0);
 
     const data = await Transaction.aggregate([
       {

@@ -117,15 +117,15 @@ const Investments = () => {
         <div className="flex justify-between p-4">
           <h3 className="text-white text-lg font-bold">Total balance</h3>
           <div className='flex justify-around gap-3'>
-            <button onClick={handleAddTransactionClick} className='bg-[#293038] text-sm pl-4 pr-4 py-2 text-white rounded-xl shadow-md hover:bg-gray-600'>Add Transaction</button>
+            <button onClick={handleAddTransactionClick} className='bg-[#293038] text-sm pl-4 pr-4 py-2 text-white rounded-md shadow-md hover:bg-gray-600'>Add Transaction</button>
             
             <Link to={"/viewtransaction"}>
-              <button className='bg-[#293038] text-sm px-4 py-2 text-white rounded-xl shadow-md hover:bg-gray-600'>View Transaction</button>
+              <button className='bg-[#293038] text-sm px-4 py-2 text-white rounded-md shadow-md hover:bg-gray-600'>View Transaction</button>
             </Link>
 
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2 rounded-xl ml-4 p-6 bg-[#293038]">
+        <div className="flex flex-1 flex-col gap-2 rounded-md ml-4 p-6 bg-[#293038]">
           {investments && investments.totalinvestment && (
             <div>
               <p className="text-white text-base font-medium ">{investments.totalinvestment.toFixed(2)}</p>
@@ -137,7 +137,7 @@ const Investments = () => {
 
 
 
-      <div className='flex flex-col overflow-hidden rounded-xl border border-[#3c4753] ml-28 mr-48'>
+      <div className='flex flex-col overflow-hidden rounded-md border border-[#3c4753] ml-28 mr-48'>
 
         <div className='grid grid-cols-6 auto-cols-fr bg-[#1c2126]'>
 
@@ -160,7 +160,7 @@ const Investments = () => {
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.units.toFixed(2)}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>{holding.amount.toFixed(2)}</p>
             <p className='px-4 py-4 text-[#9dabb8] text-sm'>10000</p>
-            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{(10000 - holding.amount.toFixed(2)>=0)?(<div className='text-green-400'>+{10000 - holding.amount.toFixed(2)}</div>):(<div className='text-red-400'>-{10000 - holding.amount.toFixed(2)}</div>)}</p>
+            <p className='px-4 py-4 text-[#9dabb8] text-sm'>{(10000 - holding.amount.toFixed(2)>=0)?(<div className='text-green-400'>+{10000 - holding.amount.toFixed(2)}</div>):(<div className='text-red-400'>{10000 - holding.amount.toFixed(2)}</div>)}</p>
 
           </div>
         )

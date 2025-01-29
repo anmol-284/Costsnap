@@ -163,7 +163,7 @@ const Transactions = () => {
               name="transactionType"
               value={filterState.transactionType}
               onChange={handleFilterChange}
-              className="bg-[#293038] text-white text-sm rounded-xl px-4"
+              className="border border-gray-700 bg-gray-950 text-white text-sm rounded-md px-4"
             >
               <option value="">All Types</option>
               <option value="Income">Income</option>
@@ -176,7 +176,7 @@ const Transactions = () => {
               name="month"
               value={filterState.month}
               onChange={handleFilterChange}
-              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+              className="border border-gray-700 bg-gray-950 text-white text-sm rounded-md px-4 py-2"
             />
 
 
@@ -185,7 +185,7 @@ const Transactions = () => {
               name="date"
               value={filterState.date}
               onChange={handleFilterChange}
-              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+              className="border border-gray-700 bg-gray-950 text-white text-sm rounded-md px-4 py-2"
             />
 
 
@@ -193,7 +193,7 @@ const Transactions = () => {
               name="expenseType"
               value={filterState.expenseType}
               onChange={handleFilterChange}
-              className="bg-[#293038] text-white text-sm rounded-xl px-4 py-2"
+              className="border border-gray-700 bg-gray-950 text-white text-sm rounded-md px-4 py-2"
             >
               <option value="">All Categories</option>
               <option value="Food">Food</option>
@@ -204,24 +204,24 @@ const Transactions = () => {
 
 
             <button
-              className="bg-gray-600 text-white text-sm rounded-xl px-4 py-2"
+              className="border border-gray-700 text-white text-sm rounded-md px-4 py-2"
               onClick={() => setFilterState({ transactionType: '', month: '', date: '', expenseType: '', search: '' })}
             >
               Clear Filters
             </button>
           </div>
           <button
-            className="bg-[#293038] text-sm px-4 text-white rounded-xl shadow-md hover:bg-gray-600"
+            className="bg-gray-100 text-sm px-4 text-gray-950 rounded-md shadow-md hover:bg-gray-300"
             onClick={handleAddTransactionClick}
           >
             Add Transaction
           </button>
 
         </div>
-        <div className="px-4 py-3">
+        <div className="px-3 py-3">
           <label className="flex flex-col min-w-40 h-12 w-full">
-            <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
-              <div className="text-[#9dabb8] flex border-none bg-[#293038] items-center justify-center pl-4 rounded-l-xl border-r-0"
+            <div className="flex w-full flex-1 items-stretch rounded-md h-full">
+              <div className="text-[#9dabb8] flex border border-gray-700 bg-gray-950 items-center justify-center pl-4 rounded-l-md border-r-0"
                 data-icon="MagnifyingGlass" data-size="24px" data-weight="regular">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                   fill="currentColor" viewBox="0 0 256 256">
@@ -231,7 +231,7 @@ const Transactions = () => {
                 </svg>
               </div>
               <input type="text" name="search" placeholder="Search all transactions" value={filterState.search} onChange={handleFilterChange}
-                className="form-input flex w-full min-w-0 flex-1 rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#293038] focus:border-none h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                className="form-input flex w-full min-w-0 flex-1 rounded-md text-white focus:outline-0 focus:ring-0 bg-gray-950 border border-gray-700 focus:border-none h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
               />
             </div>
           </label>

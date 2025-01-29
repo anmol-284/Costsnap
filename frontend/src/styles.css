@@ -10,7 +10,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   height: 100vh;
   margin: -20px 0 50px;
 }

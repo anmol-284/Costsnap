@@ -157,11 +157,12 @@ exports.filteredTransactions = async (req, res) => {
 exports.recentTransactions = async (req, res) => {
     try {
         const username = req.body.username;
-        const finduser = await investment.find({ username: username }).sort({ createdAt: -1 }).limit(10).populate().exec();
+        const transactions = await transaction.find({ username: username }).sort({ createdAt: -1 }).limit(5).populate().exec();
 
-        if (finduser) {
+        if (transactions) {
             return res.status(200).json({
                 success: true,
+                data: transactions,
                 message: "Recent transactions fetched successfully."
             })
         } else {

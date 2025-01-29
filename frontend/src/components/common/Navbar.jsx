@@ -22,85 +22,86 @@ const Navbar = () => {
     // Redirect to login page or home page
     setTimeout(() => {
       navigate('/login');
-    }, 500);
+    }, 1000);
   };
 
   return (
-    <div style={{ boxShadow: '0 6px 8px rgba(0, 0, 0, 0.1)' }} className='fixed left-0 top-0 w-60'>
-      {/* Nav Links */}
-      <div
-        className='text-white w-60 h-44 flex items-center justify-center'
-        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
-      >
-        <p className='text-4xl font-bold'>CostSnap</p>
+    <div className='fixed left-0 top-0 h-full flex flex-col justify-between bg-gray-950 border-r border-gray-800'>
+      
+      <div>
+        <div className='text-white w-60 h-20 flex items-center px-6'>
+          <p className='text-xl'>Costsnap</p>
+        </div>
+
+        <nav className='w-60'>
+          <ul className='px-4 text-gray-100'>
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to="/dashboard" className="">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
+                  <FaHome />
+                  <p className="text-md">Home</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to="/transactions" className="">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
+                  <BiTransfer />
+                  <p className="text-md">Transactions</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to="/splitbills" className="">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
+                  <LuSplit />
+                  <p className="text-md">SplitBills</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to={"/investments"} className="">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit '>
+                  <RiStockFill />
+                  <p className="text-md">Investments</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to={"/chart"} className=" ">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit '>
+                  <FaChartPie />
+                  <p className="text-md">Charts</p>
+                </div>
+              </Link>
+            </li>
+
+            <li className='p-2 hover:bg-gray-900 rounded-md'>
+              <Link to="/settings" className="">
+                <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
+                  <MdOutlineSettings />
+                  <p className="text-md">Settings</p>
+                </div>
+              </Link>
+            </li>
+
+
+          </ul>
+          
+        </nav>
       </div>
-
-      <nav className='w-60' style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-        <ul className='m-6 px-5 pb-5 text-gray-300'>
-          <li className='m-4 p-2'>
-            <Link to="/dashboard" className="hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
-                <FaHome />
-                <p className="text-xl">Home</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 p-2'>
-            <Link to="/transactions" className="hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
-                <BiTransfer />
-                <p className="text-xl">Transactions</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 p-2'>
-            <Link to="/splitbills" className="hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
-                <LuSplit />
-                <p className="text-xl">SplitBills</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 p-2'>
-            <Link to={"/investments"} className=" hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit '>
-                <RiStockFill />
-                <p className="text-xl">Investments</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 p-2'>
-            <Link to={"/chart"} className=" hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit '>
-                <FaChartPie />
-                <p className="text-xl">Charts</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 p-2'>
-            <Link to="/settings" className="hover:text-blue-700">
-              <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
-                <MdOutlineSettings />
-                <p className="text-xl">Settings</p>
-              </div>
-            </Link>
-          </li>
-
-          <li className='m-4 px-2 pt-20'>
+      <div className='px-6 py-4'>
             <Link className="text-red-700 hover:text-blue-700">
               <div className='flex items-center gap-3 transition-all duration-200 hover:scale-95 w-fit'>
                 <TbLogout />
-                <button onClick={logout}><p className="text-xl">Logout</p></button>
+                <button onClick={logout}><p className="text-md">Logout</p></button>
               </div>
             </Link>
-          </li>
-        </ul>
-      </nav>
+          </div>
     </div>
   );
 };

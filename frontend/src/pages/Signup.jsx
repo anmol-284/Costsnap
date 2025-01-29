@@ -56,103 +56,89 @@ const Signup = () => {
   };
 
   return (
-    <div className="relative flex size-full min-h-screen flex-col bg-[#111418] dark group/design-root overflow-x-hidden" style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}>
-      <div className="layout-container flex h-full grow flex-col">
-        <div className="flex flex-1 justify-center py-5">
-          <div className="layout-content-container flex flex-col w-full max-w-[960px] py-5 flex-1">
-            <div className="flex flex-col lg:flex-row justify-center items-center gap-6">
-              <div className="flex flex-col w-full lg:w-1/2 px-4">
-                {/* <h1 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center lg:text-left pb-3 pt-2">Signup</h1> */}
-                {error && <div className="text-red-500 text-center lg:text-left mb-4">{error}</div>}
-                <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
-                  <label className="flex flex-col w-full">
-                    <p className="text-white text-base font-medium leading-normal pb-2">FirstName</p>
-                    <input
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] text-base font-normal leading-normal"
-                      type="text"
-                      placeholder="Enter your firstname"
-                      value={firstname}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
-                  <label className="flex flex-col w-full">
-                    <p className="text-white text-base font-medium leading-normal pb-2">LastName</p>
-                    <input
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] text-base font-normal leading-normal"
-                      type="text"
-                      placeholder="Enter your lastname"
-                      value={lastname}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
-                  <label className="flex flex-col w-full">
-                    <p className="text-white text-base font-medium leading-normal pb-2">UserName</p>
-                    <input
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] text-base font-normal leading-normal"
-                      type="text"
-                      placeholder="Enter your UserName"
-                      value={username}
-                      onChange={(e) => setUserName(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
-                  <label className="flex flex-col w-full">
-                    <p className="text-white text-base font-medium leading-normal pb-2">Email</p>
-                    <input
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] text-base font-normal leading-normal"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </label>
-                </div>
-                <div className="flex flex-col max-w-[480px] w-full flex-wrap items-end gap-4 py-3">
-                  <label className="flex flex-col w-full">
-                    <p className="text-white text-base font-medium leading-normal pb-2">Password</p>
-                    <div className='relative'>
-                      <input
-                        className="form-input w-full flex min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#3c4753] bg-[#1c2126] focus:border-[#3c4753] h-14 placeholder:text-[#9dabb8] p-[15px] pr-12 text-base font-normal leading-normal"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#9dabb8] focus:outline-none"
-                      >
-                        {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                      </button>
-                    </div>
-                  </label>
-                </div>
-                <div className="flex py-3 w-full">
-                  <button
-                    className={`flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 ${isLoggingIn ? 'bg-green-500' : 'bg-[#1980e6]'
-                      } text-white text-sm font-bold leading-normal tracking-[0.015em]`}
-                    onClick={handleSignup}
-                  >
-                    <span className="truncate">Signup</span>
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 h-[500px] w-full lg:w-1/2">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{ backgroundImage: 'url("https://cdn.usegalileo.ai/stability/055abbe5-1a9b-49aa-979b-79a90b7b804b.png")' }}
-                ></div>
-              </div>
+    <div className="flex min-h-screen items-center justify-center bg-gray-950 text-white px-4">
+      <div className="w-full max-w-sm p-6 space-y-6 bg-gray-950 border border-[#3c4753] rounded-lg">
+        <h1 className="text-2xl font-bold text-center">Signup</h1>
+        {error && <div className="text-red-500 text-center">{error}</div>}
+
+        <div className="space-y-4">
+          <label className="block">
+            <p className="text-md pb-1">First Name</p>
+            <input
+              className="w-full py-2 px-3 text-sm rounded-md bg-[#1c2126] border border-[#3c4753] focus:outline-none focus:border-gray-300 placeholder:text-gray-500 placeholder:text-sm"
+              type="text"
+              placeholder="Enter your first name"
+              value={firstname}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </label>
+
+          <label className="block">
+            <p className="text-md pb-1">Last Name</p>
+            <input
+              className="w-full py-2 px-3 text-sm rounded-md bg-[#1c2126] border border-[#3c4753] focus:outline-none focus:border-gray-300 placeholder:text-gray-500 placeholder:text-sm"
+              type="text"
+              placeholder="Enter your last name"
+              value={lastname}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </label>
+
+          <label className="block">
+            <p className="text-md pb-1">Username</p>
+            <input
+              className="w-full py-2 px-3 text-sm rounded-md bg-[#1c2126] border border-[#3c4753] focus:outline-none focus:border-gray-300 placeholder:text-gray-500 placeholder:text-sm"
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </label>
+
+          <label className="block">
+            <p className="text-md pb-1">Email</p>
+            <input
+              className="w-full py-2 px-3 text-sm rounded-md bg-[#1c2126] border border-[#3c4753] focus:outline-none focus:border-gray-300 placeholder:text-gray-500 placeholder:text-sm"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
+
+          <label className="block">
+            <p className="text-md pb-1">Password</p>
+            <div className="relative">
+              <input
+                className="w-full py-2 px-3 text-sm rounded-md bg-[#1c2126] border border-[#3c4753] focus:outline-none focus:border-gray-300 placeholder:text-gray-500 placeholder:text-sm"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb8] focus:outline-none"
+              >
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </button>
             </div>
-          </div>
+          </label>
         </div>
+
+        <button
+          className={`w-full py-2 rounded-md text-gray-950 font-bold transition ${isLoggingIn ? "bg-green-500" : "bg-gray-100"}`}
+          onClick={handleSignup}
+        >
+          Signup
+        </button>
+
+        <p className="text-center text-sm underline text-[#9dabb8]">
+          <Link to="/login">Already have an account? Log in</Link>
+        </p>
       </div>
+      <ToastContainer />
     </div>
   );
 };
