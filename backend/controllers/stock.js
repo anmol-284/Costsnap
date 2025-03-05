@@ -16,76 +16,80 @@ exports.stocktransaction = async (req, res) => {
 
         const investid = await investment.findOne({ username: username }).populate().exec();
 
-
-        if (investid) {
-            if (transactiontype === "buy") {
-
-                const index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                const units = amount / unitprice;
-
-                if (index !== -1) {                                         // if stock is already present then update the values
-                    investid.holdings[index].units += units;
-                    investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + (amount) * 1) / investid.holdings[index].units;
-                    investid.holdings[index].amount += amount * 1;
-                } else {                                                   // stock not present then add it to holdings
-                    investid.holdings.push({
-                        stockname: stockname,
-                        units: units,
-                        averageprice: amount / units,
-                        amount: amount,
-                    });
-
-                }
-
-                investid.totalinvestment += amount * 1;            // updating totalinvestment value
-
-            } else if (transactiontype === "sell") {
-                const index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                const units = amount / unitprice;
-                console.log(index);
-                if (index !== -1) {
-                    if (investid.holdings[index].units < units) {
-                        return res.status(400).json({
-                            success: false,
-                            message: "No. of units sold are greater than units bought initially in the stock."
-                        })
-                    } else if (investid.holdings[index].units === units) {
-                        investid.totalinvestment -= investid.holdings[index].averageprice * units;
-                        investid.holdings.splice(index, 1);
-                        await investid.save();
-                        console.log(investid);
-                        // await investid.holdings.findByIdAndDelete(investid.holdings[index]._id);
-                        return res.status(200).json({
-                            success: true,
-                            message: "All units of that stock sold.",
-                        })
-                    } else {
-                        investid.holdings[index].units -= units;
-                        investid.holdings[index].amount -= investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
-                        investid.totalinvestment -= investid.holdings[index].averageprice * units;
-                    }
-
-                }else{
-                    return res.status(404).json({
-                        success: false,
-                        message: "Stock not found."
-                    });
-                }
+        if(!investid){
+            return res.status(400).json({
+                success: false,
+                message: "Investment not found."
+            });
+        }
 
 
+        if (transactiontype === "buy") {
 
-            } else {
+            const index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            const units = amount / unitprice;
 
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid transaction type."
+            if (index !== -1) {                                         // if stock is already present then update the values
+                investid.holdings[index].units += units;
+                investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + (amount) * 1) / investid.holdings[index].units;
+                investid.holdings[index].amount += amount * 1;
+            } else {                                                   // stock not present then add it to holdings
+                investid.holdings.push({
+                    stockname: stockname,
+                    units: units,
+                    averageprice: amount / units,
+                    amount: amount,
                 });
 
             }
 
+            investid.totalinvestment += amount * 1;            // updating totalinvestment value
+
+        } else if (transactiontype === "sell") {
+            const index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            const units = amount / unitprice;
+            console.log(index);
+            if (index !== -1) {
+                if (investid.holdings[index].units < units) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "No. of units sold are greater than units bought initially in the stock."
+                    })
+                } else if (investid.holdings[index].units === units) {
+                    investid.totalinvestment -= investid.holdings[index].averageprice * units;
+                    investid.holdings.splice(index, 1);
+                    await investid.save();
+                    console.log(investid);
+                    // await investid.holdings.findByIdAndDelete(investid.holdings[index]._id);
+                    return res.status(200).json({
+                        success: true,
+                        message: "All units of that stock sold.",
+                    })
+                } else {
+                    investid.holdings[index].units -= units;
+                    investid.holdings[index].amount -= investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
+                    investid.totalinvestment -= investid.holdings[index].averageprice * units;
+                }
+
+            }else{
+                return res.status(404).json({
+                    success: false,
+                    message: "Stock not found."
+                });
+            }
+
+
+
         } else {
-            console.log("Error occured while finding investment db or user in investdb");
+
+            return res.status(400).json({
+                success: false,
+                message: "Invalid transaction type."
+            });
+
         }
+
+        
 
         await investid.save();       // saving the stock in investmentmodel
 
@@ -154,124 +158,64 @@ exports.updatestocktransaction = async (req, res) => {            // expenses to
         const updatetransaction = await stock.findById(id);
         const investid = await investment.findOne({ username: username }).populate().exec();
 
-
-        if (updatetransaction) {
-            if (transactiontype === "buy") {
-
-                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                let units = updatetransaction.amount / updatetransaction.unitprice;
-
-                if (index !== -1) {                                         // if stock is already present then update the values
-                    investid.holdings[index].units -= units;
-                    investid.holdings[index].amount -= updatetransaction.amount;
-                    investid.holdings[index].averageprice = (investid.holdings[index].amount) / investid.holdings[index].units;
-                }
-
-                investid.totalinvestment -= updatetransaction.amount;            // updating totalinvestment value
-
-            } else if (transactiontype === "sell") {
-                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                let units = updatetransaction.amount / updatetransaction.unitprice;
-
-                if (index !== -1) {
-
-                    investid.holdings[index].units += units;
-                    investid.holdings[index].amount += investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
-                    investid.totalinvestment += investid.holdings[index].averageprice * units;
+        if(!investid){
+            return res.status(401).json({
+                success: false,
+                message: "Investment not found."
+            })
+        }
 
 
-                } else {
-                    investid.holdings.push({
-                        stockname: stockname,
-                        units: units,
-                        averageprice: updatetransaction.amount / units,
-                        amount: updatetransaction.amount,
-                    });
-
-                    investid.totalinvestment += updatetransaction.amount;
-                }
+        if(!updatetransaction){
+            return res.status(401).json({
+                success: false,
+                message: "Stock transaction not found."
+            })
+        }
 
 
+        if (transactiontype === "buy") {
 
+            let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            let units = updatetransaction.amount / updatetransaction.unitprice;
+
+            if (index !== -1) {                                         // if stock is already present then update the values
+                investid.holdings[index].units -= units;
+                investid.holdings[index].amount -= updatetransaction.amount;
+                investid.holdings[index].averageprice = (investid.holdings[index].amount) / investid.holdings[index].units;
             }
 
-        } else {
-            console.log("Error occured while finding investment db or user in investdb");
+            investid.totalinvestment -= updatetransaction.amount;            // updating totalinvestment value
+
+        } else if (transactiontype === "sell") {
+            let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            let units = updatetransaction.amount / updatetransaction.unitprice;
+
+            if (index !== -1) {
+
+                investid.holdings[index].units += units;
+                investid.holdings[index].amount += investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
+                investid.totalinvestment += investid.holdings[index].averageprice * units;
+
+
+            } else {
+                investid.holdings.push({
+                    stockname: stockname,
+                    units: units,
+                    averageprice: updatetransaction.amount / units,
+                    amount: updatetransaction.amount,
+                });
+
+                investid.totalinvestment += updatetransaction.amount;
+            }
         }
+
+        
 
         await investid.save();
 
         const { stockname, transactiontype, unitprice, amount } = req.body;
         updatetransaction = await stock.findByIdAndUpdate(id, { stockname, transactiontype, unitprice, amount }, { new: true });
-
-        if (investid) {
-            if (transactiontype === "buy") {
-
-                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                let units = amount / unitprice;
-
-                if (index !== -1) {                                         // if stock is already present then update the values
-                    investid.holdings[index].units += units;
-                    investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + amount) / investid.holdings[index].units;
-                    investid.holdings[index].amount += amount;
-                } else {                                                   // stock not present then add it to holdings
-                    investid.holdings.push({
-                        stockname: stockname,
-                        units: units,
-                        averageprice: amount / units,
-                        amount: amount,
-                    });
-
-                }
-
-                investid.totalinvestment += amount;            // updating totalinvestment value
-
-            } else if (transactiontype === "sell") {
-                let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
-                let units = amount / unitprice;
-
-                if (index !== -1) {
-                    if (investid.holdings[index].units < units) {
-                        return res.status(401).json({
-                            success: false,
-                            message: "No. of units sold are greater than units bought initially in the stock."
-                        })
-                    } else if (investid.holdings[index].units === units) {
-                        investid.totalinvestment -= investid.holdings[index].averageprice * units;
-                        investid.holdings.splice(index, 1);
-                        await investid.holdings.findByIdAndDelete(investid.holdings[index]._id);
-                        return res.status(200).json({
-                            success: true,
-                            message: "All units of that stock sold.",
-                        })
-                    } else {
-                        investid.holdings[index].units -= units;
-                        investid.holdings[index].amount -= investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
-                        investid.totalinvestment -= investid.holdings[index].averageprice * units;
-                    }
-
-                }      // else index === -1
-
-
-
-            } else {
-
-                return res.status(401).json({
-                    success: false,
-                    message: "Stock not found."
-                })
-
-            }
-
-        } else {
-            console.log("Error occured while finding investment db or user in investdb");
-        }
-
-
-
-        await investid.save();       // saving the stock in investmentmodel
-
-
 
         if (!updatetransaction) {
             return res.status(401).json({
@@ -279,6 +223,60 @@ exports.updatestocktransaction = async (req, res) => {            // expenses to
                 message: "Transaction not found."
             })
         }
+
+
+        if (transactiontype === "buy") {
+
+            let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            let units = amount / unitprice;
+
+            if (index !== -1) {                                         // if stock is already present then update the values
+                investid.holdings[index].units += units;
+                investid.holdings[index].averageprice = (investid.holdings[index].averageprice * (investid.holdings[index].units - units) + amount) / investid.holdings[index].units;
+                investid.holdings[index].amount += amount;
+            } else {                                                   // stock not present then add it to holdings
+                investid.holdings.push({
+                    stockname: stockname,
+                    units: units,
+                    averageprice: amount / units,
+                    amount: amount,
+                });
+
+            }
+
+            investid.totalinvestment += amount;            // updating totalinvestment value
+
+        } else if (transactiontype === "sell") {
+            let index = investid.holdings.findIndex(holding => holding.stockname === stockname);
+            let units = amount / unitprice;
+
+            if (index !== -1) {
+                if (investid.holdings[index].units < units) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "No. of units sold are greater than units bought initially in the stock."
+                    })
+                } else if (investid.holdings[index].units === units) {
+                    investid.totalinvestment -= investid.holdings[index].averageprice * units;
+                    investid.holdings.splice(index, 1);
+                    await investid.holdings.findByIdAndDelete(investid.holdings[index]._id);
+                    return res.status(200).json({
+                        success: true,
+                        message: "All units of that stock sold.",
+                    })
+                } else {
+                    investid.holdings[index].units -= units;
+                    investid.holdings[index].amount -= investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
+                    investid.totalinvestment -= investid.holdings[index].averageprice * units;
+                }
+
+            }      // else index === -1
+
+
+
+        }
+
+        await investid.save();       // saving the stock in investmentmodel
 
         return res.status(200).json({
             success: true,
@@ -324,57 +322,52 @@ exports.deletestocktransaction = async (req, res) => {
             });
         }
 
-        if (deletetransaction) {
-            console.log('stock transaction deleted');
-            if (deletetransaction.transactiontype === "buy") {
+        console.log('stock transaction deleted');
+        if (deletetransaction.transactiontype === "buy") {
 
-                const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
-                const units = deletetransaction.amount / deletetransaction.unitprice;
+            const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
+            const units = deletetransaction.amount / deletetransaction.unitprice;
 
-                if (index !== -1) {                                         // if stock is already present then update the values
-                    investid.holdings[index].units -= units;
-                    investid.holdings[index].amount -= deletetransaction.amount;
+            if (index !== -1) {                                         // if stock is already present then update the values
+                investid.holdings[index].units -= units;
+                investid.holdings[index].amount -= deletetransaction.amount;
 
-                    if (investid.holdings[index].units > 0) {
-                        investid.holdings[index].averageprice = investid.holdings[index].amount / investid.holdings[index].units;
-                    } else {
-                        investid.holdings.splice(index, 1);
-                    }
-
-                    investid.totalinvestment -= deletetransaction.amount;  
-                }else {
-                    return res.status(404).json({
-                        success: false,
-                        message: "Investment holding record not found for the user.",
-                    });
-                }
-
-            } else if (deletetransaction.transactiontype === "sell") {
-                const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
-                const units = deletetransaction.amount / deletetransaction.unitprice;
-
-                if (index !== -1) {
-
-                    investid.holdings[index].units += units;
-                    investid.holdings[index].amount += investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
-                    investid.totalinvestment += investid.holdings[index].averageprice * units;
-
-
+                if (investid.holdings[index].units > 0) {
+                    investid.holdings[index].averageprice = investid.holdings[index].amount / investid.holdings[index].units;
                 } else {
-                    investid.holdings.push({
-                        stockname: deletetransaction.stockname,
-                        units: units,
-                        averageprice: deletetransaction.amount / units,
-                        amount: deletetransaction.amount,
-                    });
-
-                    investid.totalinvestment += deletetransaction.amount;
+                    investid.holdings.splice(index, 1);
                 }
 
+                investid.totalinvestment -= deletetransaction.amount;  
+            }else {
+                return res.status(404).json({
+                    success: false,
+                    message: "Investment holding record not found for the user.",
+                });
             }
 
-        } else {
-            console.log("Error occured while finding investment db or user in investdb");
+        } else if (deletetransaction.transactiontype === "sell") {
+            const index = investid.holdings.findIndex(holding => holding.stockname === deletetransaction.stockname);
+            const units = deletetransaction.amount / deletetransaction.unitprice;
+
+            if (index !== -1) {
+
+                investid.holdings[index].units += units;
+                investid.holdings[index].amount += investid.holdings[index].averageprice * units;                   // to be confirmed later bcz value can get negative if this is done
+                investid.totalinvestment += investid.holdings[index].averageprice * units;
+
+
+            } else {
+                investid.holdings.push({
+                    stockname: deletetransaction.stockname,
+                    units: units,
+                    averageprice: deletetransaction.amount / units,
+                    amount: deletetransaction.amount,
+                });
+
+                investid.totalinvestment += deletetransaction.amount;
+            }
+
         }
 
         await investid.save();

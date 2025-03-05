@@ -6,7 +6,6 @@ exports.investment = async(req, res) => {
         const {username, totalinvestment, currentvalue, stocks, watchlist} = req.body;
         const investmentd = await invt.create({username, totalinvestment, currentvalue, stocks, watchlist});
 
-        // send a json response and success flag
         res.status(200).json(
             {
                 success: true,
@@ -34,18 +33,18 @@ exports.getinvestment = async(req, res) => {
         const finduser = await invt.findOne({username:username}).populate().exec();
         // console.log("finduser:",finduser);
 
-        if(finduser){
-            return res.status(200).json({
-                success:true,
-                data:finduser,
-                message:"All investment details fetched successfully."
-            })
-        }else{
+        if(!finduser){
             return res.status(401).json({
                 success:false,
-                message:"Cannot find user."
+                message:"User not found."
             })
         }
+
+        return res.status(200).json({
+            success:true,
+            data:finduser,
+            message:"Investment details fetched successfully."
+        })
     }
     catch(err){
         console.error(err);
