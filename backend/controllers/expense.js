@@ -27,7 +27,7 @@ exports.expenseByCategory = async (req, res) => {
       {
         $project: {
           _id: "$_id",
-          total: { total: "$totalSpent" },
+          total: "$totalSpent",
         },
       },
     ]).exec();

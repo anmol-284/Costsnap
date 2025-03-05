@@ -69,7 +69,11 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    fetchFilteredTransactions();
+    const debounceTimeout = setTimeout(() => {
+      fetchFilteredTransactions();
+    }, 300);
+  
+    return () => clearTimeout(debounceTimeout);
   }, [filterState]);
 
   const handleDelete = (transactionId) => {
@@ -231,7 +235,7 @@ const Transactions = () => {
                 </svg>
               </div>
               <input type="text" name="search" placeholder="Search all transactions" value={filterState.search} onChange={handleFilterChange}
-                className="form-input flex w-full min-w-0 flex-1 rounded-md text-white focus:outline-0 focus:ring-0 bg-gray-950 border border-gray-700 focus:border-none h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                className="form-input flex w-full min-w-0 flex-1 rounded-md text-white focus:outline-0 focus:ring-0 bg-gray-950 border border-gray-700 focus:border-1 h-full placeholder:text-[#9dabb8] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
               />
             </div>
           </label>
@@ -339,14 +343,14 @@ const Transactions = () => {
                 <button
                   type="button"
                   onClick={() => setIsFormVisible(false)}
-                  className="bg-[#293038] text-white px-4 py-2 rounded-xl shadow-md"
+                  className="bg-[#293038] text-white px-4 py-2 rounded-md shadow-md"
                 >
                   Close
                 </button>
                 <button
                   type="submit"
                   onClick={handleFormSubmit}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-xl shadow-md hover:bg-gray-400"
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md shadow-md hover:bg-gray-400"
                 >
                   Submit
                 </button>

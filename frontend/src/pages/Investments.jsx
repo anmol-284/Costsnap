@@ -231,14 +231,14 @@ const Investments = () => {
                 <button
                   type="button"
                   onClick={() => setIsFormVisible(false)}
-                  className="bg-[#293038] text-white px-4 py-2 rounded-xl shadow-md"
+                  className="bg-[#293038] text-white px-4 py-2 rounded-md shadow-md"
                 >
                   Close
                 </button>
                 <button
                   type="submit"
                   onClick={handleFormSubmit}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-xl shadow-md hover:bg-gray-400"
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md shadow-md hover:bg-gray-400"
                 >
                   Submit
                 </button>
