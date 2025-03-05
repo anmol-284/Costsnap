@@ -30,4 +30,6 @@ const stock = new mongoose.Schema (
     }
 )
 
+stock.index({username : 1, createdAt : -1});
+
 module.exports = mongoose.model("Stock", stock);

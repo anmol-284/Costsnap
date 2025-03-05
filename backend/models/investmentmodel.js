@@ -57,5 +57,7 @@ const investSchema = new mongoose.Schema(
     }
 )
 
+investSchema.index({username : 1});
+
 // userSchema.plugin(uniqueuser);
 module.exports = mongoose.model("Investment", investSchema);
