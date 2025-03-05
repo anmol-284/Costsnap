@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-// const {ObjectId} = require('mongodb');
-// const Transaction = require('../models/transaction');
-// const uniqueuser = require('mongoose-unique-validator');
 
 const investSchema = new mongoose.Schema(
     {
@@ -57,7 +54,6 @@ const investSchema = new mongoose.Schema(
     }
 )
 
-investSchema.index({username : 1});
+investSchema.index({username : 1, "holdings.stockname" : 1, "holdings.units" : 1, "holdings.averageprice" : 1, "holdings.amount" : 1});
 
-// userSchema.plugin(uniqueuser);
 module.exports = mongoose.model("Investment", investSchema);

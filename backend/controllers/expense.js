@@ -153,6 +153,59 @@ exports.monthlytransaction= async(req, res) => {
       {
         $group: {
           _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Income'] }, '$amount', 0],
+            },
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ['$transactiontype', 'Expense'] }, '$amount', 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          date: '$_id',
+          totalIncome: 1,
+          totalExpense: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { date: 1 }, // Sort by date in ascending order
+      },
+    ]);
+
+    res.json({ data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+
+exports.yearlytransaction= async(req, res) => {
+
+  try {
+    const date = new Date();
+    const y = date.getFullYear();
+    const firstDay = new Date(y, 0, 1);
+    const lastDay = new Date(y+1, 0, 0);
+
+    const data = await Transaction.aggregate([
+      {
+        $match: {
+          username: req.body.username,
+          createdAt: { $gte: firstDay, $lte: lastDay },
+        },
+      },
+      {
+        $group: {
+          _id: {
             $dateToString: { format: '%Y-%m', date: '$createdAt' },
           },
           totalIncome: {
@@ -186,57 +239,3 @@ exports.monthlytransaction= async(req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-
-
-exports.yearlytransaction= async(req, res) => {
-
-  try {
-    const date = new Date();
-    const y = date.getFullYear();
-    const firstDay = new Date(y, 1, 0);
-    const lastDay = new Date(y+1, 1, 0);
-
-    const data = await Transaction.aggregate([
-      {
-        $match: {
-          username: req.body.username,
-          createdAt: { $gte: firstDay, $lte: lastDay },
-        },
-      },
-      {
-        $group: {
-          _id: {
-            $dateToString: { format: '%Y', date: '$createdAt' },
-          },
-          totalIncome: {
-            $sum: {
-              $cond: [{ $eq: ['$transactiontype', 'Income'] }, '$amount', 0],
-            },
-          },
-          totalExpense: {
-            $sum: {
-              $cond: [{ $eq: ['$transactiontype', 'Expense'] }, '$amount', 0],
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          year: '$_id',
-          totalIncome: 1,
-          totalExpense: 1,
-          _id: 0,
-        },
-      },
-      {
-        $sort: { date: 1 }, 
-      },
-    ]);
-
-    res.json({ data });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
-

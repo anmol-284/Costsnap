@@ -162,7 +162,7 @@ const Chartpage = () => {
 
 
       if (result.data) {
-        const labels = result.data.map(item => item.month);
+        const labels = result.data.map(item => item.date);
         const expensevalues = result.data.map(item => item.totalExpense);
         const incomevalues = result.data.map(item => item.totalIncome);
 
@@ -221,7 +221,7 @@ const Chartpage = () => {
 
 
       if (result.data) {
-        const labels = result.data.map(item => item.year);
+        const labels = result.data.map(item => item.month);
         const expensevalues = result.data.map(item => item.totalExpense);
         const incomevalues = result.data.map(item => item.totalIncome);
 

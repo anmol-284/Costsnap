@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema(
             type:String,
             required: true,
         },
-        transactiontype:{      // Spend or Income
+        transactiontype:{      // Expense or Income
             type: String,   
             required: true,
         },
@@ -30,6 +30,6 @@ const transactionSchema = new mongoose.Schema(
     }
 )
 
-transactionSchema.index({username : 1, createdAt : -1});
+transactionSchema.index({username : 1, createdAt : -1, category : 1, transactiontype : 1});
 
 module.exports = mongoose.model("Transaction", transactionSchema);
