@@ -12,65 +12,24 @@ exports.expenseByCategory = async (req, res) => {
   try {
     let categoryMonthlyAvg = await Transaction.aggregate([
       {
-        $facet: {
-          average: [
-            {
-              $match: { 
-                username: req.body.username,
-                category: {$ne: "Income"},
-               },
-            },
-            {
-              $group: {
-                _id: { category: "$category", month: { $month: "$createdAt" } },
-                totalSpent: { $sum: "$amount" },
-                count: { $sum: 1 },
-              },
-            },
-            {
-              $group: {
-                _id: "$_id.category",
-                avgSpent: { $avg: { $divide: ["$totalSpent", "$count"] } },
-              },
-            },
-            {
-              $project: {
-                _id: "$_id",
-                value: { average: "$avgSpent" },
-              },
-            },
-          ],
-          total: [
-            {
-              $match: {
-                createdAt: { $gte: firstDay, $lte: lastDay },
-                username: req.body.username,
-                category: { $ne:'Income'},
-              },
-            },
-            {
-              $group: {
-                _id: "$category",
-                totalSpent: { $sum: "$amount" },
-              },
-            },
-            {
-              $project: {
-                _id: "$_id",
-                value: { total: "$totalSpent" },
-              },
-            },
-          ],
+        $match: {
+          createdAt: { $gte: firstDay, $lte: lastDay },
+          username: req.body.username,
+          category: { $ne:'Income'},
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          totalSpent: { $sum: "$amount" },
         },
       },
       {
         $project: {
-          overview: { $concatArrays: ["$average", "$total"] },
+          _id: "$_id",
+          total: { total: "$totalSpent" },
         },
       },
-      { $unwind: '$overview' },
-      { $replaceRoot: { newRoot: "$overview" } },
-      { $group: { _id: "$_id", mergedValues: { $mergeObjects: "$value" }}},
     ]).exec();
     res.json(categoryMonthlyAvg);
   } catch (err) {

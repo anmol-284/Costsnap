@@ -51,9 +51,9 @@ const Chartpage = () => {
       console.log(result);
 
 
-      if (result) {
+      if (result && result.length > 0) {
         const labels = result.map(item => item._id);
-        const values = result.map(item => item.mergedValues.total);
+        const values = result.map(item => item.total);
 
         const newChartData = {
           labels: labels,
@@ -79,7 +79,7 @@ const Chartpage = () => {
 
         setChartdata(newChartData);
       } else {
-        console.error('Invalid data format:', result);
+        console.error('Invalid Chartdata format :', result);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -103,7 +103,7 @@ const Chartpage = () => {
       console.log("week", result.data);
 
 
-      if (result.data) {
+      if (result.data && result.data.length > 0) {
         const labels = result.data.map(item => item.date);
         const expensevalues = result.data.map(item => item.totalExpense);
         const incomevalues = result.data.map(item => item.totalIncome);
@@ -137,7 +137,7 @@ const Chartpage = () => {
         setWeekdata(newChartData);
 
       } else {
-        console.error('Invalid data format:', result);
+        console.error('Invalid Weekdata format:', result);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -161,7 +161,7 @@ const Chartpage = () => {
       console.log("month", result.data);
 
 
-      if (result.data) {
+      if (result.data && result.data.length > 0) {
         const labels = result.data.map(item => item.date);
         const expensevalues = result.data.map(item => item.totalExpense);
         const incomevalues = result.data.map(item => item.totalIncome);
@@ -193,7 +193,7 @@ const Chartpage = () => {
         setMonthdata(newChartData);
 
       } else {
-        console.error('Invalid data format:', result);
+        console.error('Invalid Monthdata format:', result);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -220,7 +220,7 @@ const Chartpage = () => {
       console.log("year", result.data);
 
 
-      if (result.data) {
+      if (result.data && result.data.length > 0) {
         const labels = result.data.map(item => item.month);
         const expensevalues = result.data.map(item => item.totalExpense);
         const incomevalues = result.data.map(item => item.totalIncome);
@@ -252,7 +252,7 @@ const Chartpage = () => {
         setYeardata(newChartData);
 
       } else {
-        console.error('Invalid data format:', result);
+        console.error('Invalid Yeardata format:', result);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -326,7 +326,7 @@ const Chartpage = () => {
             {chartdata ? (
               <div className='w-[400px] h-[400px] ml-20'><Doughnut data={chartdata} options={doughnutoptions} /></div>
             ) : (
-              <p>No available data</p>
+              <p className='flex h-80 items-center'>No available data</p>
             )}
           </div>
         </div>
@@ -338,7 +338,7 @@ const Chartpage = () => {
             {weekdata ? (
               <div className=''><Line data={weekdata} options={lineoptions}  /></div>
             ) : (
-              <p>No available data</p>
+              <p className='flex h-auto items-center'>No available data</p>
             )}
           </div>
         </div>
@@ -351,7 +351,7 @@ const Chartpage = () => {
             {monthdata ? (
               <div className=''><Line data={monthdata} options={lineoptions}  /></div>
             ) : (
-              <p>No available data</p>
+              <p className='flex h-auto items-center'>No available data</p>
             )}
           </div>
         </div>
@@ -363,7 +363,7 @@ const Chartpage = () => {
             {yeardata ? (
               <div className=''><Line data={yeardata} options={lineoptions}  /></div>
             ) : (
-              <p>No available data</p>
+              <p className='flex h-auto items-center'>No available data</p>
             )}
           </div>
         </div>
