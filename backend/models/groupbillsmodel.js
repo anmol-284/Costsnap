@@ -27,7 +27,7 @@ const grpBillSchema = new mongoose.Schema(
                 type:String,
                 required: true,
             },
-            shareamount:{
+            amount:{
                 type:Number,
                 required:true,
             },

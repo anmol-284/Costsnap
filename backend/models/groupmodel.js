@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Bills = require('../models/groupbillsmodel');
 
 const GroupSchema = new mongoose.Schema(
     {
@@ -7,42 +6,37 @@ const GroupSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        grpMembers: [
-            
+        groupMembers: [
             {
-                username:{
-                    type:String,
-                },
-                settlement:[
-                    {
-                        username:{
-                            type:String,
-                        },
-                        share:{
-                            type:Number,
-                            default:0,
-                        },
-                        smartsettlement:{
-                            type:Number,
-                            default:0,
-                        },
-                    }
-                ]
-
+                type: String,    
             }
-            
         ],
-        // bills:[{
-        //     type:mongoose.Schema.Types.ObjectId,
-        //     ref:'Bills'
-        // }
-        // ],
-        createdAt:{
+        settlement: [
+            {
+                from: {
+                    type: String,
+                },
+                to: {
+                    type: String,
+                },
+                amount: {
+                    type: Number,
+                    default: 0,
+                },
+            }
+        ],
+        bills: [                  // recent 10 bills
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Bills'
+            }
+        ],
+        createdAt: {
             type: Date,
             required: true,
             default: Date.now(),
         },
-        updatedAt:{
+        updatedAt: {
             type: Date,
             required: true,
             default: Date.now(),

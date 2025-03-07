@@ -34,13 +34,18 @@ const userSchema = new mongoose.Schema(
             default: null
         },
         verified: {
-            type:Boolean,
-            default:false
+            type: Boolean,
+            default: false
         },
         groups: [
             {
-                type: String,
-                required: true,
+                groupId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Groups'
+                },
+                groupName: {
+                    type: String,
+                }
             }
         ],
         createdAt: {
