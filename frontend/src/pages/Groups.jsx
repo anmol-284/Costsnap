@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GroupView from './GroupView';
 import { Link } from 'react-router-dom';
 
-const SplitBills = () => {
+const Groups = () => {
   const navigate = useNavigate();
 
   const [groupName, setGroupName] = useState('');
@@ -127,4 +127,4 @@ const SplitBills = () => {
   );
 };
 
-export default SplitBills;
+export default Groups;

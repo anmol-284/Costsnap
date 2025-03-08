@@ -54,10 +54,10 @@ const Navbar = () => {
             </li>
 
             <li className='p-2 hover:bg-gray-900 rounded-md'>
-              <Link to="/splitbills" className="">
+              <Link to="/groups" className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
                   <LuSplit />
-                  <p className="text-md">SplitBills</p>
+                  <p className="text-md">Groups</p>
                 </div>
               </Link>
             </li>
