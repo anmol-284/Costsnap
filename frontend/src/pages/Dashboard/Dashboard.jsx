@@ -233,12 +233,12 @@ const Dashboard = () => {
                 </svg>
               </div>
               <div class="flex flex-1 flex-col justify-center">
-                <p class="text-white text-md font-normal leading-normal">{transaction.transactionname}</p>
+                <p class="text-white text-sm font-normal leading-normal">{transaction.transactionname}</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Date: {new Date(transaction.createdAt).toLocaleDateString()}</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Category: {transaction.category}</p>
               </div>
             </div>
-            <div class="shrink-0"><p class="text-white text-base font-normal leading-normal">
+            <div class="shrink-0"><p class="text-white text-sm font-normal leading-normal">
 
 
               {(transaction.transactiontype === "Income") ? (<div className='text-green-400'>+{transaction.amount}</div>) : (<div className='text-red-400'>-{transaction.amount}</div>)}</p></div>

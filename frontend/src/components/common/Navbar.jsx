@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome, FaChartPie } from 'react-icons/fa';
-import { BiTransfer } from 'react-icons/bi';
-import { LuSplit } from 'react-icons/lu';
-import { RiStockFill } from 'react-icons/ri';
+import { BiBarChartAlt2 } from 'react-icons/bi';
+import { LuLayoutDashboard } from 'react-icons/lu';
+import { RiGroupLine } from 'react-icons/ri';
 import { MdOutlineSettings } from 'react-icons/md';
-import { TbLogout } from 'react-icons/tb';
+import { TbLogout, TbChartCandle } from 'react-icons/tb';
+import { CgArrowsExchange } from "react-icons/cg";
 
 import withAuth from '../Hoc';  // Ensure correct path to withAuth
 
@@ -38,8 +38,8 @@ const Navbar = () => {
             <li className='p-2 hover:bg-gray-900 rounded-md'>
               <Link to="/dashboard" className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
-                  <FaHome />
-                  <p className="text-md">Home</p>
+                  <LuLayoutDashboard />
+                  <p className="text-sm">Dashboard</p>
                 </div>
               </Link>
             </li>
@@ -47,8 +47,8 @@ const Navbar = () => {
             <li className='p-2 hover:bg-gray-900 rounded-md'>
               <Link to="/transactions" className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
-                  <BiTransfer />
-                  <p className="text-md">Transactions</p>
+                  <CgArrowsExchange />
+                  <p className="text-sm">Transactions</p>
                 </div>
               </Link>
             </li>
@@ -56,8 +56,8 @@ const Navbar = () => {
             <li className='p-2 hover:bg-gray-900 rounded-md'>
               <Link to="/groups" className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
-                  <LuSplit />
-                  <p className="text-md">Groups</p>
+                  <RiGroupLine />
+                  <p className="text-sm">Groups</p>
                 </div>
               </Link>
             </li>
@@ -65,8 +65,8 @@ const Navbar = () => {
             <li className='p-2 hover:bg-gray-900 rounded-md'>
               <Link to={"/investments"} className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit '>
-                  <RiStockFill />
-                  <p className="text-md">Investments</p>
+                  <TbChartCandle />
+                  <p className="text-sm">Investments</p>
                 </div>
               </Link>
             </li>
@@ -74,8 +74,8 @@ const Navbar = () => {
             <li className='p-2 hover:bg-gray-900 rounded-md'>
               <Link to={"/chart"} className=" ">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit '>
-                  <FaChartPie />
-                  <p className="text-md">Charts</p>
+                  <BiBarChartAlt2 />
+                  <p className="text-sm">Charts</p>
                 </div>
               </Link>
             </li>
@@ -84,7 +84,7 @@ const Navbar = () => {
               <Link to="/settings" className="">
                 <div className='flex items-center gap-3 transition-all duration-200 w-fit'>
                   <MdOutlineSettings />
-                  <p className="text-md">Settings</p>
+                  <p className="text-sm">Settings</p>
                 </div>
               </Link>
             </li>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { FaTrash } from 'react-icons/fa';
+import { MdOutlineDelete } from "react-icons/md";
 import { getCookie } from '../../components/utils';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -254,15 +254,15 @@ const Transactions = () => {
                 </svg>
               </div>
               <div class="flex flex-1 flex-col justify-center">
-                <p class="text-white text-base font-medium leading-normal">{transaction.transactionname}</p>
+                <p class="text-white text-sm font-medium leading-normal">{transaction.transactionname}</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Date: {new Date(transaction.createdAt).toLocaleDateString()}</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal">Category: {transaction.category}</p>
               </div>
             </div>
             <div class="shrink-0 flex flex-col items-end justify-around pr-8">
-              <p class="text-white text-base font-normal leading-normal">
+              <p class="text-white text-sm font-normal leading-normal">
                 {(transaction.transactiontype === "Income") ? (<div className='text-green-400'>+{transaction.amount}</div>) : (<div className='text-red-400'>-{transaction.amount}</div>)}</p>
-              <button className='text-gray-500' onClick={() => handleDelete(transaction._id)}> <FaTrash size={16}></FaTrash> </button>
+              <button className='text-gray-500' onClick={() => handleDelete(transaction._id)}> <MdOutlineDelete size={16}></MdOutlineDelete> </button>
             </div>
           </div>
         ))}
