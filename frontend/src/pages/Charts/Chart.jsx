@@ -2,12 +2,12 @@ import { React, useEffect, useState } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { getCookie } from '../components/utils';
+import { getCookie } from '../../components/utils';
 
 // Register the required elements
 Chart.register(ArcElement, Tooltip, Legend);
 
-const Chartpage = () => {
+const Charts = () => {
   const [chartdata, setChartdata] = useState(null);
   const [weekdata, setWeekdata] = useState(null);
   const [monthdata, setMonthdata] = useState(null);
@@ -376,4 +376,4 @@ const Chartpage = () => {
 };
 
 
-export default Chartpage;
+export default Charts;

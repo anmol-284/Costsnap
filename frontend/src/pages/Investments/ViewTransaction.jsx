@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCookie } from '../components/utils';
+import { getCookie } from '../../components/utils';
 import { FaTrash } from 'react-icons/fa';
 
 const ViewTransaction = () => {

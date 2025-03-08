@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCookie } from '../components/utils';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 
 const HomePage = () => {
   const token = getCookie('token');

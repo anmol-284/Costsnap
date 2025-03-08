@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { getCookie } from '../components/utils';
+import { getCookie } from '../../components/utils';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

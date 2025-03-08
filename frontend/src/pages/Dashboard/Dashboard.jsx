@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { getCookie } from '../components/utils';
+import { getCookie } from '../../components/utils';
 
 
 const Dashboard = () => {
