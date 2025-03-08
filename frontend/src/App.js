@@ -9,16 +9,10 @@ import Investments from './pages/Investments';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import About from './SettingPages/About';
-import ExportData from './SettingPages/ExportData';
-import Help from './SettingPages/Help';
-import Notifications from './SettingPages/Notifications';
-import Theme from './SettingPages/Theme';
-import AddTransaction from './InvestPages/AddTransaction';
-import ViewTransaction from './InvestPages/ViewTransaction';
-import ForgetPassword from './login/ForgetPassword';
-import ConfirmPassword from './login/ConfirmPassword';
-import GroupView from './SplitPages/GroupView';
+import ViewTransaction from './pages/ViewTransaction';
+import ForgetPassword from './pages/ForgetPassword';
+import ConfirmPassword from './pages/ConfirmPassword';
+import GroupView from './pages/GroupView';
 import Chartpage from './pages/PieChart';
 import EmailVerificationPage from './pages/VerifyEmail';
 import { getCookie } from '../src/components/utils';
@@ -46,12 +40,6 @@ function App() {
         <Route path="settings" element={<ProtectedRoute> <Settings /> </ProtectedRoute>} />
         <Route path="login" element={<Login onLogin={(newToken) => setToken(newToken)} />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="about" element={<ProtectedRoute> <About /> </ProtectedRoute>} />
-        <Route path="exportdata" element={<ProtectedRoute> <ExportData /> </ProtectedRoute>} />
-        <Route path="help" element={<ProtectedRoute> <Help /> </ProtectedRoute>} />
-        <Route path="notifications" element={<ProtectedRoute> <Notifications /> </ProtectedRoute>} />
-        <Route path="theme" element={<Theme />} />
-        <Route path="addtransaction" element={<ProtectedRoute> <AddTransaction /> </ProtectedRoute>} />
         <Route path="viewtransaction" element={<ProtectedRoute> <ViewTransaction /> </ProtectedRoute>} />
         <Route path="forgetpassword" element={<ForgetPassword />} />
         <Route path="confirmpassword" element={<ConfirmPassword />} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GroupView from '../SplitPages/GroupView';
+import GroupView from './GroupView';
 import { Link } from 'react-router-dom';
 
 const SplitBills = () => {
