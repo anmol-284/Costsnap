@@ -38,6 +38,3 @@
 
 ### 📊 Graphs
 ![Graphs](https://i.postimg.cc/qR0s1npG/Screenshot-2025-06-07-013018.png)
-
-## 📂 Folder Structure
-
