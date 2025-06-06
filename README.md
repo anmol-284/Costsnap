@@ -17,31 +17,27 @@
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose ODM)
 - **Authentication**: JWT, bcrypt
-- **State Management**: React Context API / Redux (based on your implementation)
-- **Cloud Hosting**: (Add if you're using Render, Vercel, or Netlify)
+- **State Management**: React Context API
+- **Cloud Hosting**: Vercel
 
 ---
 
 ## 📷 Screenshots
 
 ### 🏠 Dashboard Overview
-![Dashboard](./screenshots/Screenshot%202025-06-07%20012204.png)
+![Dashboard](https://i.postimg.cc/GpDTwpXS/Screenshot-2025-06-07-012204.png)
 
 ### 📘 Investment Summary
-![Investment Summary](./screenshots/Screenshot%202025-06-07%20012959.png)
+![Investment Summary](https://i.postimg.cc/qR0s1npG/Screenshot-2025-06-07-013018.png)
 
 ### 💸 Expense Page
-![Expenses](./screenshots/Screenshot%202025-06-07%20013008.png)
+![Expenses](https://i.postimg.cc/RCYmfTSK/Screenshot-2025-06-07-012959.png)
 
 ### 👥 Bill Splitting
-![Bill Split](./screenshots/Screenshot%202025-06-07%20013018.png)
+![Bill Split](https://i.postimg.cc/hGQyk9WW/Screenshot-2025-06-07-013008.png)
 
-### 🔐 User Authentication
-![Login](./screenshots/Screenshot%202025-06-07%20013146.png)
-
-> Make sure to store your screenshots in a `screenshots` folder inside your GitHub repo.
-
----
+### 📊 Graphs
+![Graphs](https://i.postimg.cc/qR0s1npG/Screenshot-2025-06-07-013018.png)
 
 ## 📂 Folder Structure
 
